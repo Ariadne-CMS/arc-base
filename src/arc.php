@@ -12,7 +12,7 @@
 	namespace arc;
 
 	if ( !defined('ARC_BASE_DIR') ) {
-		define('ARC_BASE_DIR', dirname( dirname( __FILE__ ) ) . DIRECTORY_SEPARATOR );
+		define('ARC_BASE_DIR', __DIR__ . DIRECTORY_SEPARATOR );
 	}
 
 	class arc {

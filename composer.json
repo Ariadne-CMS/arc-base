@@ -1,5 +1,6 @@
 {
-	"name": "arc/arc",
+	"name": "arc/base",
+	"version": "1.0",
 	"type": "library",
 	"description": "Ariadne Component Library",
 	"keywords": ["component","components"],
@@ -12,11 +13,11 @@
 		}
 	],
 	"require": {
-		"php": ">=5.3"
+		"php": ">=5.4"
 	},
 	"autoload": {
-		"psr-0": {
-			"arc": "src/"
+		"psr-4": {
+			"arc\\": "src/"
 		}
 	}
 }
