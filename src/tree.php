@@ -222,7 +222,7 @@
                     uasort( $node->childNodes, $callback );
                 };
             } else if ( $node->childNodes instanceof \ArrayObject ) {
-                $sort = function( $node ) {
+                $sort = function( $node ) use ($callback ) {
                     $node->childNodes->uasort( $callback );
                 };
             } else {
