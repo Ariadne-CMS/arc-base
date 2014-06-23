@@ -218,7 +218,7 @@
          */
         static public function sort( $node, $callback, $nodeName = 'nodeName' ) {
             if ( is_array($node->childNodes) )  {
-                $sort = function( $node ) {
+                $sort = function( $node ) use ( $callback ) {
                     uasort( $node->childNodes, $callback );
                 };
             } else if ( $node->childNodes instanceof \ArrayObject ) {
