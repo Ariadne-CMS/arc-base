@@ -9,7 +9,7 @@
 	 * file that was distributed with this source code.
 	 */
 
-	namespace arc;
+namespace arc;
 
 	class exceptions {
 		const NO_PATH_INFO     = 101;

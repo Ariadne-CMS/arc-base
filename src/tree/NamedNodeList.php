@@ -9,7 +9,7 @@
 	 * file that was distributed with this source code.
 	 */
 	 
-	namespace arc\tree;
+namespace arc\tree;
 
     /**
      * Implements an ArrayObject with constraint that a value is always a NamedNode and its key is always the name
