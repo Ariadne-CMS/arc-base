@@ -50,7 +50,6 @@
 				return $root; // empty tree
 			}
 			//ksort($tree); // sort by path, so parents are always earlier in the array than children
-			$previousPath = '/';
 			$previousParent = $root;
 			foreach( $tree as $path => $data ) {
 				$previousPath = $previousParent->getPath();
@@ -218,11 +217,11 @@
          */
         static public function sort( $node, $callback, $nodeName = 'nodeName' ) {
             if ( is_array($node->childNodes) )  {
-                $sort = function( $node ) {
+                $sort = function( $node ) use ( $callback ) {
                     uasort( $node->childNodes, $callback );
                 };
             } else if ( $node->childNodes instanceof \ArrayObject ) {
-                $sort = function( $node ) {
+                $sort = function( $node ) use ($callback ) {
                     $node->childNodes->uasort( $callback );
                 };
             } else {
