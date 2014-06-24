@@ -9,7 +9,7 @@
 	 * file that was distributed with this source code.
 	 */
 	 
-	namespace arc\tree;
+namespace arc\tree;
 
     /**
      * Implements a tree node which has uniquely named child nodes, as in a filesystem.

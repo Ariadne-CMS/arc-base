@@ -9,7 +9,7 @@
 	 * file that was distributed with this source code.
 	 */
 
-	namespace arc;
+namespace arc;
 
 	/**
 	 *	Utility methods to handle common path related tasks, cleaning, changing relative to absolute, etc.
