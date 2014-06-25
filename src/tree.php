@@ -49,8 +49,6 @@ class tree {
 		if ( !is_array($tree) ) {
 			return $root; // empty tree
 		}
-		//ksort($tree); // sort by path, so parents are always earlier in the array than children
-		$previousPath = '/';
 		$previousParent = $root;
 		foreach( $tree as $path => $data ) {
 			$previousPath = $previousParent->getPath();
