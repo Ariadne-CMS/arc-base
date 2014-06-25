@@ -12,4 +12,3 @@
 namespace arc;
 
 class ExceptionAuthenticationError extends Exception { }
-

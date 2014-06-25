@@ -14,28 +14,32 @@ namespace arc;
 /*
 * @requires \arc\lambda
 */
-class context {
+class context
+{
+    public static $context = null;
 
-	public static $context = null;
+    public static function push($params)
+    {
+        self::$context = self::$context->extend( $params );
+    }
 
-	public static function push( $params ) {
-		self::$context = self::$context->extend( $params );
-	}
+    public static function pop()
+    {
+        self::$context = self::$context->prototype;
+    }
 
-	public static function pop() {
-		self::$context = self::$context->prototype;
-	}
+    public static function peek($level = 0)
+    {
+        $context = self::$context;
+        for ($i=$level; $i>=0; $i--) {
+            $context = $context->prototype;
+        }
 
-	public static function peek( $level = 0 ) {
-		$context = self::$context;
-		for ( $i=$level; $i>=0; $i-- ) {
-			$context = $context->prototype;
-		}
-		return $context;
-	}
+        return $context;
+    }
 
 }
 
 context::$context = new lambda\Prototype([
-	'arcPath' => '/'
+    'arcPath' => '/'
 ]);
