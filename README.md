@@ -1,6 +1,12 @@
 ARC: Ariadne Component Library 
 ========================= 
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Ariadne-CMS/arc-base/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Ariadne-CMS/arc-base/?branch=master)
+[![Latest Stable Version](https://poser.pugx.org/arc/base/v/stable.svg)](https://packagist.org/packages/arc/base)
+[![Total Downloads](https://poser.pugx.org/arc/base/downloads.svg)](https://packagist.org/packages/arc/base)
+[![Latest Unstable Version](https://poser.pugx.org/arc/base/v/unstable.svg)](https://packagist.org/packages/arc/base)
+[![License](https://poser.pugx.org/arc/base/license.svg)](https://packagist.org/packages/arc/base)
+
 A flexible component library for PHP 5.4+ 
 ----------------------------------------- 
 
