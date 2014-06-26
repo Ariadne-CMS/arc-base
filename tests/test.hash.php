@@ -26,6 +26,10 @@
 
             $result = \arc\hash::get( '/foo/baz/', $hash );
             $this->assertTrue( $result === null );
+
+            $result = \arc\hash::get( '/foo/baz/', $hash, 'default' );
+            $this->assertTrue( $result === 'default' );
+
         }
 
         function testHashExists()
