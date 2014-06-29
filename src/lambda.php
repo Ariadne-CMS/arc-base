@@ -29,11 +29,11 @@ class lambda
         end( $partialArgs );
         $l = key( $partialArgs );
         for ($i=0; $i<=$l; $i++) {
-            if ( !array_key_exists($i, $partialArgs) && count($addedArgs) ) {
+            if (!array_key_exists($i, $partialArgs) && count($addedArgs)) {
                 $partialArgs[ $i ] = array_shift( $addedArgs );
             }
         }
-        if ( count($addedArgs) ) { // there are $addedArgs left, so there should be no 'holes' in $partialArgs
+        if (count($addedArgs)) { // there are $addedArgs left, so there should be no 'holes' in $partialArgs
             $partialArgs =array_merge( $partialArgs, $addedArgs );
         }
         // fill any 'holes' in $partialArgs with entries from $defaultArgs
@@ -52,14 +52,14 @@ class lambda
     */
     public static function pepper(callable $callable, $namedArgs=null)
     {
-        if ( !is_array( $namedArgs ) ) {
-            if ( !is_array( $callable ) ) {
+        if (!is_array( $namedArgs )) {
+            if (!is_array( $callable )) {
                 $ref = new ReflectionFunction( $callable );
             } else {
                 $ref = new ReflectionMethod( $callable );
             }
             $namedArgs = [];
-            foreach ( $ref->getParameters() as $parameter ) {
+            foreach ($ref->getParameters() as $parameter) {
                 $namedArgs[ $parameter->getName() ] = $parameter->getDefaultValue();
             }
         }
@@ -94,5 +94,4 @@ class lambda
             return $result;
         };
     }
-
 }
