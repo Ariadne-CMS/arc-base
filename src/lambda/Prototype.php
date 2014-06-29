@@ -59,7 +59,7 @@ final class Prototype
     public function __construct($properties = [])
     {
         foreach ($properties as $property => $value) {
-            if ( !is_numeric( $property ) ) {
+            if (!is_numeric( $property )) {
                 $this->{$property} = $this->_bind( $value );
             }
         }
@@ -67,11 +67,11 @@ final class Prototype
 
     public function __call($name, $args)
     {
-        if ( isset( $this->{$name} ) && is_callable( $this->{$name} ) ) {
+        if (isset( $this->{$name} ) && is_callable( $this->{$name} )) {
             return call_user_func_array( $this->{$name}, $args );
-        } elseif ( is_object( $this->prototype) ) {
+        } elseif (is_object( $this->prototype)) {
             $method = $this->_bind( $this->getPrototypeProperty( $name ) );
-            if ( is_callable( $method ) ) {
+            if (is_callable( $method )) {
                 return call_user_func_array( $method, $args );
             }
         }
@@ -113,12 +113,12 @@ final class Prototype
 
     private function getPrototypeProperty($name)
     {
-        if ( is_object( $this->prototype ) ) {
+        if (is_object( $this->prototype )) {
             // cache prototype access per property - allows fast but partial cache purging
-            if ( !array_key_exists( $name, self::$properties ) ) {
+            if (!array_key_exists( $name, self::$properties )) {
                 self::$properties[ $name ] = new \SplObjectStorage();
             }
-            if ( !self::$properties[$name]->contains( $this->prototype ) ) {
+            if (!self::$properties[$name]->contains( $this->prototype )) {
                 self::$properties[$name][ $this->prototype ] = $this->_bind( $this->prototype->{$name} );
             }
 
@@ -130,7 +130,7 @@ final class Prototype
 
     public function __set($name, $value)
     {
-        if ( !in_array( $name, [ 'prototype', 'properties' ] ) ) {
+        if (!in_array( $name, [ 'prototype', 'properties' ] )) {
             $this->{$name} = $this->_bind( $value );
             // purge prototype cache for this property - this will clear too much but cache will be filled again
             // clearing exactly the right entries from the cache will generally cost more performance than this
@@ -157,7 +157,7 @@ final class Prototype
 
     public function __invoke()
     {
-        if ( is_callable( $this->__invoke ) ) {
+        if (is_callable( $this->__invoke )) {
             return call_user_func_array( $this->__invoke, func_get_args() );
         } else {
             throw new \arc\ExceptionMethodNotFound( 'No __invoke method found in this Object', \arc\exceptions::OBJECT_NOT_FOUND );
@@ -167,7 +167,7 @@ final class Prototype
     public function __clone()
     {
         // make sure all methods are bound to $this - the new clone.
-        foreach ( get_object_vars( $this ) as $property ) {
+        foreach (get_object_vars( $this ) as $property) {
             $this->{$property} = $this->_bind( $property );
         }
         $this->_tryToCall( $this->__clone );
@@ -185,7 +185,7 @@ final class Prototype
 
     private function _tryToCall($f, $args = [])
     {
-        if ( is_callable( $f ) ) {
+        if (is_callable( $f )) {
             return call_user_func_array( $f, $args );
         }
     }
