@@ -232,11 +232,11 @@ class tree
     public static function sort($node, $callback, $nodeName = 'nodeName')
     {
         if ( is_array($node->childNodes) ) {
-            $sort = function ($node) {
+            $sort = function ($node) use ($callback) {
                 uasort( $node->childNodes, $callback );
             };
         } elseif ($node->childNodes instanceof \ArrayObject) {
-            $sort = function ($node) {
+            $sort = function ($node) use ($callback) {
                 $node->childNodes->uasort( $callback );
             };
         } else {
