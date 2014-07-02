@@ -36,7 +36,7 @@ class path
         $prevpath = '/';
         $parents = self::reduce( $path, function ($result, $entry) use ($root, &$prevpath) {
             $prevpath .= $entry . '/';
-            if ( strpos( $prevpath , $root ) === 0 && $prevpath !== $root ) {
+            if (strpos( $prevpath, $root ) === 0 && $prevpath !== $root) {
                 // Add only parents below the root
                 $result[] = $prevpath;
             }
@@ -63,13 +63,13 @@ class path
     public static function collapse($path, $cwd = '/')
     {
         // removes '.', changes '//' to '/', changes '\\' to '/', calculates '..' up to '/'
-        if ( !isset($path[0]) ) {
+        if (!isset($path[0])) {
             return $cwd;
         }
         if ($path[0] !== '/' && $path[0] !== '\\') {
             $path = $cwd . '/' . $path;
         }
-        if ( isset( self::$collapseCache[$path] ) ) { // cache hit - so return that
+        if (isset( self::$collapseCache[$path] )) { // cache hit - so return that
 
             return self::$collapseCache[$path];
         }
@@ -78,18 +78,18 @@ class path
             $tempPath,
             function ($result, $entry) {
                 switch ($entry) {
-                    case '..' :
+                    case '..':
                         $result = dirname( $result );
                         if ( isset($result[1]) ) { // fast check to see if there is a dirname
                             $result .= '/';
                         }
                         $result[0] = '/'; // php has a bug in dirname('/') -> returns a '\\' in windows
-                    break;
+                        break;
                     case '.':
-                    break;
+                        break;
                     default:
                         $result .= $entry .'/';
-                    break;
+                        break;
                 }
 
                 return $result;
@@ -118,14 +118,14 @@ class path
      */
     public static function clean($path, $filter = null, $flags = null)
     {
-        if ( is_callable( $filter ) ) {
+        if (is_callable( $filter )) {
             $callback = $filter;
         } else {
-            if ( !isset( $filter ) ) {
+            if (!isset( $filter )) {
                  $filter = FILTER_SANITIZE_ENCODED;
             }
-            if ( !isset($flags) ) {
-                $flags = FILTER_FLAG_ENCODE_LOW|FILTER_FLAG_ENCODE_HIGH;
+            if (!isset($flags)) {
+                $flags = FILTER_FLAG_ENCODE_LOW | FILTER_FLAG_ENCODE_HIGH;
             }
             $callback = function ($entry) use ($filter, $flags) {
                 return filter_var( $entry, $filter, $flags);
@@ -153,7 +153,7 @@ class path
             return null;
         }
         $parent = dirname( $path );
-        if ( isset($parent[1]) ) { // fast check to see if there is a dirname
+        if (isset($parent[1])) { // fast check to see if there is a dirname
             $parent .= '/';
         }
         $parent[0] = '/'; // dirname('/something/') returns '\' in windows.
@@ -177,7 +177,7 @@ class path
      */
     public static function head($path)
     {
-        if ( !\arc\path::isAbsolute($path) ) {
+        if (!\arc\path::isAbsolute($path)) {
             $path = '/' . $path;
         }
 
@@ -216,7 +216,7 @@ class path
         $targetPath = \arc\path::collapse( $targetPath );
         $sourcePath = \arc\path::collapse( $sourcePath );
         $commonParent = \arc\path::search( $sourcePath, function ($path) use ($targetPath, &$diff) {
-            if ( !\arc\path::isChild( $targetPath, $path ) ) {
+            if (!\arc\path::isChild( $targetPath, $path )) {
                 $diff .= '../';
             } else {
                 return $path;
@@ -245,7 +245,7 @@ class path
      */
     public static function isAbsolute($path)
     {
-        return $path[0]==='/';
+        return $path[0] === '/';
     }
 
     protected static function getSplitPath($path)
@@ -270,7 +270,7 @@ class path
     public static function map($path, $callback)
     {
         $splitPath = self::getSplitPath( $path );
-        if ( count($splitPath) ) {
+        if (count($splitPath)) {
             $result = array_map( $callback, $splitPath );
 
             return '/' . join( $result, '/' ) .'/';
@@ -326,10 +326,9 @@ class path
         }
         foreach ($parents as $parent) {
             $result = call_user_func( $callback, $parent );
-            if ( isset( $result ) ) {
+            if (isset( $result )) {
                 return $result;
             }
         }
     }
-
 }
