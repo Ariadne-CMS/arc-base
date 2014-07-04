@@ -28,7 +28,7 @@ class lambda
     {
         end( $partialArgs );
         $l = key( $partialArgs );
-        for ($i=0; $i<=$l; $i++) {
+        for ($i = 0; $i <= $l; $i++) {
             if (!array_key_exists($i, $partialArgs) && count($addedArgs)) {
                 $partialArgs[ $i ] = array_shift( $addedArgs );
             }
