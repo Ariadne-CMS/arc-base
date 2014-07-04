@@ -106,7 +106,9 @@ final class Prototype
 
     private function getLocalProperties()
     {
-        $getLocalProperties = \Closure::bind( function ($o) { return get_object_vars($o); }, new \stdClass(), new \stdClass() );
+        $getLocalProperties = \Closure::bind( function ($o) {
+                return get_object_vars($o);
+            }, new \stdClass(), new \stdClass() );
 
         return [ 'prototype' => $this->prototype ] + $getLocalProperties( $this );
     }
@@ -189,5 +191,4 @@ final class Prototype
             return call_user_func_array( $f, $args );
         }
     }
-
 }
