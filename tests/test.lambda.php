@@ -112,4 +112,18 @@
             $result = $baz( 'y' );
             $this->assertTrue( $result == [ 'x' => 'x', 'y' => 'y', 'z' => 'z', 'q' => 'q' ] );
         }
+        function testToString()
+        {
+            $foo = \arc\lambda::prototype([
+                'foofoo' => function () {
+                    return 'foofoo';
+                },
+                '__toString' => function () {
+                    return 'foobar';
+                },
+            ]);
+            $tst = (string)$foo;
+            $this->assertTrue( 'foobar' === $tst);
+
+        }
     }
