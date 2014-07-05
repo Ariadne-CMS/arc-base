@@ -11,7 +11,7 @@
 
     require_once( __DIR__ . DIRECTORY_SEPARATOR .'bootstrap.php' );
 
-    class TestTemplate extends UnitTestCase
+    class TestTemplate extends PHPUnit_Framework_TestCase
     {
         function testSimpleSubstitution()
         {

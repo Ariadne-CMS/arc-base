@@ -12,7 +12,7 @@
 
     require_once( __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php' );
 
-    class TestHash extends UnitTestCase
+    class TestHash extends PHPUnit_Framework_TestCase
     {
         function testHashGet()
         {
@@ -22,7 +22,7 @@
                 ]
             ];
             $result = \arc\hash::get( '/foo/bar/', $hash );
-            $this->assertEqual( $result, $hash['foo']['bar'] );
+            $this->assertEquals( $result, $hash['foo']['bar'] );
 
             $result = \arc\hash::get( '/foo/baz/', $hash );
             $this->assertTrue( $result === null );
@@ -49,14 +49,14 @@
         {
             $path = '/foo/bar/0/';
             $result = \arc\hash::compileName( $path );
-            $this->assertEqual( $result, 'foo[bar][0]' );
+            $this->assertEquals( $result, 'foo[bar][0]' );
         }
 
         function testHashParse()
         {
             $name = 'foo[bar][0]';
             $result = \arc\hash::parseName( $name );
-            $this->assertEqual( $result, '/foo/bar/0/' );
+            $this->assertEquals( $result, '/foo/bar/0/' );
         }
 
         function testTree()
@@ -68,7 +68,7 @@
             ];
             $node = \arc\hash::tree( $hash );
             $tree = \arc\tree::collapse( $node );
-            $this->assertEqual( $tree, [ '/foo/bar/' => 'This is a bar' ] );
+            $this->assertEquals( $tree, [ '/foo/bar/' => 'This is a bar' ] );
         }
 
     }
