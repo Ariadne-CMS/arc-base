@@ -11,7 +11,7 @@
 
     require_once( __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php' );
 
-    class TestLambda extends UnitTestCase
+    class TestLambda extends PHPUnit_Framework_TestCase
     {
         function testPrototype()
         {

@@ -11,7 +11,7 @@
 
     require_once( __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php' );
 
-    class TestPath extends UnitTestCase
+    class TestPath extends PHPUnit_Framework_TestCase
     {
         function testMapReduce()
         {
