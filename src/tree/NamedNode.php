@@ -129,8 +129,8 @@ namespace arc\tree;
         /**
          *	Adds a new child element to this node with the given name as index in the child list.
          *	If an existing child has the same name, that child will be discarded.
-         *	@param string $name The index name of the child
-         *	@param mixed $data The data for the new child. If $data is not an instance of \arc\tree\NamedNode
+         *	@param string $nodeName The index name of the child
+         *	@param mixed $child The data for the new child. If $data is not an instance of \arc\tree\NamedNode
          *		a new instance will be constructed with $data as its nodeValue.
          *	@return \arc\tree\NamedNode The new child node.
          */
@@ -155,9 +155,9 @@ namespace arc\tree;
         }
 
         /**
-         *	Removes an existing child with the given name from this node.
-         *	@param string $name The index name of the child
-         *	@return \arc\tree\NamedNode The removed child or null.
+         * Removes an existing child with the given name from this node.
+         * @param string $nodeName The index name of the child
+         * @return \arc\tree\NamedNode The removed child or null.
          */
         public function removeChild($nodeName)
         {

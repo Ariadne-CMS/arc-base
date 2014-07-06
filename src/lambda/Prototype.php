@@ -29,6 +29,11 @@ final class Prototype
     */
     private $prototype = null;
 
+    /**
+     * Returns true if the named property is set in this object, disregarding the prototype chain
+     * @param $name
+     * @return bool
+     */
     public function hasOwnProperty($name)
     {
         $props = $this->getLocalProperties($this);
@@ -36,6 +41,11 @@ final class Prototype
         return isset( $props[$name] );
     }
 
+    /**
+     * Creates a new prototype object extending this one.
+     * @param array $properties
+     * @return static
+     */
     public function extend($properties = [])
     {
         $properties['prototype'] = $this;
@@ -44,6 +54,11 @@ final class Prototype
         return $descendant;
     }
 
+    /**
+     * Returns true if the current object has the given object somewhere in its prototype chain.
+     * @param $object
+     * @return bool
+     */
     public function hasPrototype($object)
     {
         if (!$this->prototype) {
@@ -56,6 +71,9 @@ final class Prototype
         return $this->prototype->hasPrototype( $object );
     }
 
+    /**
+     * @param array $properties
+     */
     public function __construct($properties = [])
     {
         foreach ($properties as $property => $value) {
@@ -65,6 +83,12 @@ final class Prototype
         }
     }
 
+    /**
+     * @param $name
+     * @param $args
+     * @return mixed
+     * @throws \arc\ExceptionMethodNotFound
+     */
     public function __call($name, $args)
     {
         if ( isset( $this->{$name} ) && is_callable( $this->{$name} ) ) {
@@ -78,6 +102,10 @@ final class Prototype
         throw new \arc\ExceptionMethodNotFound( $name.' is not a method on this Object', \arc\exceptions::OBJECT_NOT_FOUND );
     }
 
+    /**
+     * @param $name
+     * @return array|null|Object
+     */
     public function __get($name)
     {
         switch ($name) {
@@ -93,17 +121,24 @@ final class Prototype
         }
     }
 
+    /**
+     * Returns a list of publically accessible properties of this object and its prototypes.
+     * @return array
+     */
     private function getPublicProperties()
     {
         // get public properties only, so use closure to escape local scope.
         // the anonymous function / closure is needed to make sure that get_object_vars
         // only returns public properties.
-        // FIXME: check if private/protected properties are really skipped with $getLocalProperties
         return ( is_object( $this->prototype )
             ? array_merge( $this->prototype->properties, $this->getLocalProperties( $this ) )
             : $this->getLocalProperties( $this ) );
     }
 
+    /**
+     * Returns a list of publically accessible properties of this object only, disregarding its prototypes.
+     * @return array
+     */
     private function getLocalProperties()
     {
         $getLocalProperties = \Closure::bind( function ($o) { return get_object_vars($o); }, new \stdClass(), new \stdClass() );
@@ -111,6 +146,11 @@ final class Prototype
         return [ 'prototype' => $this->prototype ] + $getLocalProperties( $this );
     }
 
+    /**
+     * Get a property from the prototype chain and caches it.
+     * @param $name
+     * @return null
+     */
     private function getPrototypeProperty($name)
     {
         if ( is_object( $this->prototype ) ) {
@@ -121,13 +161,16 @@ final class Prototype
             if ( !self::$properties[$name]->contains( $this->prototype ) ) {
                 self::$properties[$name][ $this->prototype ] = $this->_bind( $this->prototype->{$name} );
             }
-
             return self::$properties[$name][ $this->prototype ];
         } else {
             return null;
         }
     }
 
+    /**
+     * @param $name
+     * @param $value
+     */
     public function __set($name, $value)
     {
         if ( !in_array( $name, [ 'prototype', 'properties' ] ) ) {
@@ -138,6 +181,10 @@ final class Prototype
         }
     }
 
+    /**
+     * @param $name
+     * @return bool
+     */
     public function __isset($name)
     {
         $val = $this->getPrototypeProperty( $name );
@@ -145,16 +192,26 @@ final class Prototype
         return isset( $val );
     }
 
+    /**
+     *
+     */
     public function __destruct()
     {
         return $this->_tryToCall( $this->__destruct );
     }
 
+    /**
+     * @return mixed
+     */
     public function __toString()
     {
         return $this->_tryToCall( $this->__toString );
     }
 
+    /**
+     * @return mixed
+     * @throws \arc\ExceptionMethodNotFound
+     */
     public function __invoke()
     {
         if ( is_callable( $this->__invoke ) ) {
@@ -164,6 +221,9 @@ final class Prototype
         }
     }
 
+    /**
+     *
+     */
     public function __clone()
     {
         // make sure all methods are bound to $this - the new clone.
@@ -173,6 +233,11 @@ final class Prototype
         $this->_tryToCall( $this->__clone );
     }
 
+    /**
+     * Binds the property to this object
+     * @param $property
+     * @return mixed
+     */
     private function _bind($property)
     {
         if ($property instanceof \Closure) {
@@ -183,6 +248,12 @@ final class Prototype
         return $property;
     }
 
+    /**
+     * Only call $f if it is a callable.
+     * @param $f
+     * @param array $args
+     * @return mixed
+     */
     private function _tryToCall($f, $args = [])
     {
         if ( is_callable( $f ) ) {
