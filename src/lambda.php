@@ -12,12 +12,13 @@ class lambda
     }
 
     /**
-    * Returns a function with the given arguments already entered or partially applied.
-    * @param callable $function The function to curry
-    * @param mixed $argument,... unlimited Optional arguments to curry the function with
-    * @return callable
-    */
-    public static function partial($callable, $partialArgs, $defaultArgs = [])
+     * Returns a function with the given arguments already entered or partially applied.
+     * @param callable $callable The function to curry
+     * @param array $partialArgs unlimited Optional arguments to curry the function with
+     * @param array $defaultArgs optional default values
+     * @return callable
+     */
+    public static function partial(callable $callable, $partialArgs, $defaultArgs = [])
     {
         return function () use ($callable, $partialArgs, $defaultArgs) {
             return call_user_func_array( $callable, self::partialMerge( $partialArgs, func_get_args(), $defaultArgs ) );
@@ -44,19 +45,19 @@ class lambda
     }
 
     /**
-    * Returns a function with named arguments. The peppered function accepts one argument - a named array of values
-    * @param callable $function The function or method to pepper
-    * @param array $namedArgs Optional. The named arguments to pepper the function with, the order must be the order
-    *        in which the unpeppered function expects them. If not set, pepper will use Reflection to get them.
-    * @return callable
-    */
+     * Returns a function with named arguments. The peppered function accepts one argument - a named array of values
+     * @param callable $callable The function or method to pepper
+     * @param array $namedArgs Optional. The named arguments to pepper the function with, the order must be the order
+     *        in which the unpeppered function expects them. If not set, pepper will use Reflection to get them.
+     * @return callable
+     */
     public static function pepper(callable $callable, $namedArgs=null)
     {
         if ( !is_array( $namedArgs ) ) {
             if ( !is_array( $callable ) ) {
-                $ref = new ReflectionFunction( $callable );
+                $ref = new \ReflectionFunction( $callable );
             } else {
-                $ref = new ReflectionMethod( $callable );
+                $ref = new \ReflectionMethod( $callable );
             }
             $namedArgs = [];
             foreach ( $ref->getParameters() as $parameter ) {
