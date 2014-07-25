@@ -52,7 +52,9 @@ class NamedNodelist extends \ArrayObject
         if (!($value instanceof \arc\tree\NamedNode)) {
             $value = new \arc\tree\NamedNode( $name, $this->parentNode, null, $value );
         }
-        $value->parentNode = $this->parentNode;
+        if ( $value->parentNode !== $this->parentNode ) {
+            $value->parentNode = $this->parentNode;
+        }
         if ($this->offsetExists( $name )) {
             $old = $this->offsetGet( $name );
             if ($old !== $value) {
