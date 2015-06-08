@@ -136,11 +136,11 @@ class NamedNode implements \Serializable
      */
     public function appendChild($nodeName, $child=null)
     {
-        if (!( $child instanceof \arc\tree\NamedNode )) {
+        if ( !( $child instanceof \arc\tree\NamedNode )) {
             $child = new \arc\tree\NamedNode( $nodeName, $this, null, $child );
         }
-        if ($child->parentNode !== $this) {
-            if (isset($child->parentNode)) {
+        if ( $child->parentNode !== $this) {
+            if ( isset($child->parentNode)) {
                 $child->parentNode->removeChild( $child->nodeName );
             }
             if (isset( $this->childNodes[ $nodeName ] )) {
@@ -156,12 +156,12 @@ class NamedNode implements \Serializable
 
     /**
      *	Removes an existing child with the given name from this node.
-     *	@param string $name The index name of the child
+     *	@param string $nodeName The index name of the child
      *	@return \arc\tree\NamedNode The removed child or null.
      */
     public function removeChild($nodeName)
     {
-        if (isset( $this->childNodes[ $nodeName ] )) {
+        if ( isset( $this->childNodes[ $nodeName ] )) {
             $child = $this->childNodes[ $nodeName ];
             unset( $this->childNodes[ $nodeName ] );
             $child->parentNode = null;
