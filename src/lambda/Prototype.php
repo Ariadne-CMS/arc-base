@@ -36,7 +36,7 @@ final class Prototype
      */
     public function hasOwnProperty($name)
     {
-        $props = $this->getLocalProperties($this);
+        $props = $this->getLocalProperties();
 
         return isset( $props[$name] );
     }
@@ -132,7 +132,7 @@ final class Prototype
         // only returns public properties.
         return ( is_object( $this->prototype )
             ? array_merge( $this->prototype->properties, $this->getLocalProperties( $this ) )
-            : $this->getLocalProperties( $this ) );
+            : $this->getLocalProperties() );
     }
 
     /**
