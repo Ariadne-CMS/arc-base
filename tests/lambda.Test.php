@@ -11,7 +11,7 @@
 
     require_once( __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php' );
 
-    class TestLambda extends UnitTestCase
+    class TestLambda extends PHPUnit_Framework_TestCase
     {
         function testPrototype()
         {
@@ -111,5 +111,19 @@
             $baz = \arc\lambda::partial( $bar, [ 0 => 'x', 3 => 'q' ], [ 2 => 'z' ] );
             $result = $baz( 'y' );
             $this->assertTrue( $result == [ 'x' => 'x', 'y' => 'y', 'z' => 'z', 'q' => 'q' ] );
+        }
+        function testToString()
+        {
+            $foo = \arc\lambda::prototype([
+                'foofoo' => function () {
+                    return 'foofoo';
+                },
+                '__toString' => function () {
+                    return 'foobar';
+                },
+            ]);
+            $tst = (string)$foo;
+            $this->assertTrue( 'foobar' === $tst);
+
         }
     }

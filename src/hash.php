@@ -30,7 +30,7 @@ class hash
         $elements = explode( '[', $name );
         $path = array();
         foreach ($elements as $element) {
-            if ( $element[ strlen($element)-1 ] === ']' ) {
+            if ($element[ strlen($element) -1 ] === ']') {
                 $element = substr($element, 0, -1);
             }
             if ($element[0] === "'") {
@@ -60,7 +60,7 @@ class hash
         if (is_array( $hash ) || $hash instanceof \Traversable) {
             foreach ($hash as $index => $value) {
                 $child = $parent->appendChild( $index );
-                if ( is_array( $value ) ) {
+                if (is_array( $value )) {
                     self::tree( $value, $child );
                 } else {
                     $child->nodeValue = $value;
@@ -72,5 +72,4 @@ class hash
 
         return $parent;
     }
-
 }
