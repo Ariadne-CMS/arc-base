@@ -112,4 +112,13 @@
             $result = $baz( 'y' );
             $this->assertTrue( $result == [ 'x' => 'x', 'y' => 'y', 'z' => 'z', 'q' => 'q' ] );
         }
+
+        function testPepper() {
+            $f = function($peppered, $reallypeppered) {
+                return isset($peppered) && isset($reallypeppered) && $peppered==$reallypeppered;
+            };
+            $p = \arc\lambda::pepper( $f, [ 'peppered', 'reallypeppered'] );
+            $result = $p(['reallypeppered' => 1, 'peppered' => 1]);
+            $this->assertTrue($result);
+        }
     }
