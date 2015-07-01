@@ -48,6 +48,14 @@ class hash
         return (is_array($hash) && array_key_exists( $filename, $hash ));
     }
 
+    private static function escape($name) {
+        return str_replace('/','%2F',$name);
+    }
+
+    private static function unescape($name) {
+        return str_replace('%2F','/',$name);
+    }
+
     /**
      * Parse a variable name like 'name[index][index2]' to a key-path like '/name/index/index2/'
      * @param $name
@@ -64,7 +72,7 @@ class hash
             if ($element[0] === "'") {
                 $element = substr($element, 1, -1);
             }
-            $path[] = $element;
+            $path[] = self::escape($element);
         }
 
         return '/'.implode( '/', $path ).'/';
@@ -79,6 +87,7 @@ class hash
     public static function compileName($path, $root = '')
     {
         return \arc\path::reduce( $path, function ($result, $item) {
+            $item = self::unescape($item);
             return (!$result ? $item : $result . '[' . $item . ']');
         }, $root );
     }
@@ -96,7 +105,7 @@ class hash
         }
         if (is_array( $hash ) || $hash instanceof \Traversable) {
             foreach ($hash as $index => $value) {
-                $child = $parent->appendChild( $index );
+                $child = $parent->appendChild( self::escape($index) );
                 if (is_array( $value )) {
                     self::tree( $value, $child );
                 } else {
