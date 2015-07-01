@@ -77,8 +77,13 @@ final class Prototype
     public function __construct($properties = [])
     {
         foreach ($properties as $property => $value) {
-            if (!is_numeric( $property )) {
-                $this->{$property} = $this->_bind( $value );
+            if ( !is_numeric( $property ) && $property!='properties' ) {
+                 if ( $property[0] == ':' ) {
+                    $property = substr($property, 1);
+                    $this->{$property} = $value;
+                } else {
+                    $this->{$property} = $this->_bind( $value );
+                }
             }
         }
     }
