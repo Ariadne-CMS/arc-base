@@ -1,13 +1,31 @@
 <?php
-
+/*
+ * This file is part of the Ariadne Component Library.
+ *
+ * (c) Muze <info@muze.nl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace arc;
 
+/**
+ * Class hash
+ * Utility methods to work with recursive hashes, setting/getting values and convert hashes to trees.
+ * @package arc
+ */
 class hash
 {
+    /**
+     * Recursively search a hash for a key-path and return its value or the default value if the key-path is not found.
+     * @param $path
+     * @param $hash
+     * @param null $default
+     * @return mixed|null
+     */
     public static function get($path, $hash, $default = null)
     {
         $result = \arc\path::reduce( $path, function ($result, $item) {
-            $item = rawurldecode($item); //FIXME: this may be unexpected
             if (is_array( $result ) && array_key_exists( $item, $result )) {
                 return $result[$item];
             }
@@ -15,18 +33,28 @@ class hash
         return isset($result) ? $result : $default;
     }
 
+    /**
+     * Check if a key-path is defined in the hash.
+     * @param $path
+     * @param $hash
+     * @return bool
+     */
     public static function exists($path, $hash)
     {
         $parent = \arc\path::parent($path);
-        $filename = rawurldecode(basename( $path )); //FIXME: this may be unexpected
+        $filename = basename( $path );
         $hash = self::get( $parent, $hash );
 
         return (is_array($hash) && array_key_exists( $filename, $hash ));
     }
 
+    /**
+     * Parse a variable name like 'name[index][index2]' to a key-path like '/name/index/index2/'
+     * @param $name
+     * @return string
+     */
     public static function parseName($name)
     {
-        // parse name[index][index2] to /name/index/index2/
         $elements = explode( '[', $name );
         $path = array();
         foreach ($elements as $element) {
@@ -36,22 +64,31 @@ class hash
             if ($element[0] === "'") {
                 $element = substr($element, 1, -1);
             }
-            $path[] = rawurlencode($element);
+            $path[] = $element;
         }
 
         return '/'.implode( '/', $path ).'/';
     }
 
+    /**
+     * Compile a key-path like '/name/index/index2/' to a variable name like 'name[index][index2]'
+     * @param $path
+     * @param string $root
+     * @return mixed
+     */
     public static function compileName($path, $root = '')
     {
-        // parse /name/index/index2/ to name[index][index2]
         return \arc\path::reduce( $path, function ($result, $item) {
-            $item = rawurldecode($item);
-
             return (!$result ? $item : $result . '[' . $item . ']');
         }, $root );
     }
 
+    /**
+     * Generate a NamedNode tree from a hash.
+     * @param $hash
+     * @param null $parent
+     * @return tree\NamedNode|null
+     */
     public static function tree($hash, $parent = null)
     {
         if (!isset( $parent )) {
