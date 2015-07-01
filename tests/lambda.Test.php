@@ -118,7 +118,7 @@
             $f = function($peppered, $reallypeppered) {
                 return isset($peppered) && isset($reallypeppered) && $peppered==$reallypeppered;
             };
-            $p = \arc\lambda::pepper( $f, [ 'peppered', 'reallypeppered'] );
+            $p = \arc\lambda::pepper( $f, [ 'peppered' => null, 'reallypeppered' => null] );
             $result = $p(['reallypeppered' => 1, 'peppered' => 1]);
             $this->assertTrue($result);
         }

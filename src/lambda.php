@@ -49,6 +49,7 @@ class lambda
      * @param callable $callable The function or method to pepper
      * @param array $namedArgs Optional. The named arguments to pepper the function with, the order must be the order
      *        in which the unpeppered function expects them. If not set, pepper will use Reflection to get them.
+     *        Format is [ 'argumentName' => 'defaultValue' ]
      * @return callable
      */
     public static function pepper(callable $callable, $namedArgs=null)
@@ -66,7 +67,9 @@ class lambda
         }
 
         return function ($otherArgs) use ($callable, $namedArgs) {
-            return call_user_func_array( $callable, array_values( array_merge( $namedArgs, $otherArgs ) ) );
+            $args = array_values( array_merge( $namedArgs, $otherArgs ) );
+            var_dump($args);
+            return call_user_func_array( $callable, $args );
         };
     }
 
