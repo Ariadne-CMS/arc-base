@@ -1,9 +1,26 @@
 <?php
-
+/*
+ * This file is part of the Ariadne Component Library.
+ *
+ * (c) Muze <info@muze.nl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace arc;
 
+/**
+ * Class lambda
+ * Experimental functionality, may be removed later, use at own risk.
+ * @package arc
+ */
 class lambda
 {
+    /**
+     * Creates a new Prototype object
+     * @param $properties
+     * @return lambda\Prototype
+     */
     public static function prototype($properties)
     {
         // do not ever use a single prototype for every other lambda\Prototype
@@ -55,11 +72,7 @@ class lambda
     public static function pepper(callable $callable, $namedArgs=null)
     {
         if ( !is_array( $namedArgs ) ) {
-            if ( !is_array( $callable ) ) {
-                $ref = new \ReflectionFunction( $callable );
-            } else {
-                $ref = new \ReflectionMethod( $callable );
-            }
+            $ref = !is_array($callable) ? new \ReflectionFunction($callable) : new \ReflectionMethod($callable[0], $callable[1]);
             $namedArgs = [];
             foreach ($ref->getParameters() as $parameter) {
                 $namedArgs[ $parameter->getName() ] = $parameter->getDefaultValue();
@@ -68,7 +81,6 @@ class lambda
 
         return function ($otherArgs) use ($callable, $namedArgs) {
             $args = array_values( array_merge( $namedArgs, $otherArgs ) );
-            var_dump($args);
             return call_user_func_array( $callable, $args );
         };
     }
