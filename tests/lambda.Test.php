@@ -11,7 +11,7 @@
 
     require_once( __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php' );
 
-    class TestLambda extends UnitTestCase
+    class TestLambda extends PHPUnit_Framework_TestCase
     {
         function testPrototype()
         {
@@ -113,12 +113,27 @@
             $this->assertTrue( $result == [ 'x' => 'x', 'y' => 'y', 'z' => 'z', 'q' => 'q' ] );
         }
 
-        function testPepper() {
+        function testPepper()
+        {
             $f = function($peppered, $reallypeppered) {
                 return isset($peppered) && isset($reallypeppered) && $peppered==$reallypeppered;
             };
             $p = \arc\lambda::pepper( $f, [ 'peppered', 'reallypeppered'] );
             $result = $p(['reallypeppered' => 1, 'peppered' => 1]);
             $this->assertTrue($result);
+        }
+
+        function testToString()
+        {
+            $foo = \arc\lambda::prototype([
+                'foofoo' => function () {
+                    return 'foofoo';
+                },
+                '__toString' => function () {
+                    return 'foobar';
+                },
+            ]);
+            $tst = (string)$foo;
+            $this->assertTrue( 'foobar' === $tst);
         }
     }

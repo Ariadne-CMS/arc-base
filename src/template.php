@@ -20,14 +20,14 @@ class template
      */
     public static function substitute($template, $arguments)
     {
-        if ( is_object($arguments) && !($arguments instanceof \ArrayObject ) ) {
+        if (is_object($arguments) && !($arguments instanceof \ArrayObject )) {
             $arguments = get_object_vars( $arguments );
         }
         $regex = '\{\$(' . join( array_keys( (array) $arguments ), '|' ) . ')\}';
 
         return preg_replace_callback( '/'.$regex.'/', function ($matches) use ($arguments) {
             $argument = $arguments[ $matches[1] ];
-            if ( is_callable( $argument ) ) {
+            if (is_callable( $argument )) {
                 $argument = call_user_func( $argument, $matches[1] );
             }
 
@@ -68,18 +68,17 @@ EOFUNC;
 
     public static function compileSubstitute($template)
     {
-        $template = preg_replace('/EOTEMPLATE;.*$/','',$template);
+        $template = preg_replace('/EOTEMPLATE;.*$/', '', $template);
 
         return self::compile( "<"."?php\n echo <<<EOTEMPLATE\n".$template."\nEOTEMPLATE;\n ?".">");
     }
 
     public static function run($template, $arguments)
     {
-        if ( !is_callable($template) ) {
+        if (!is_callable($template)) {
             $template = self::compile( $template );
         }
 
         return $template( $arguments );
     }
-
 }

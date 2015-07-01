@@ -31,13 +31,12 @@ class context
     public static function peek($level = 0)
     {
         $context = self::$context;
-        for ($i=$level; $i>=0; $i--) {
+        for ($i = $level; $i >= 0; $i--) {
             $context = $context->prototype;
         }
 
         return $context;
     }
-
 }
 
 context::$context = new lambda\Prototype([
