@@ -153,10 +153,9 @@ final class Prototype
      */
     private function getLocalProperties()
     {
-        $getLocalProperties = \Closure::bind( function ($o) {
-                return get_object_vars($o);
-            }, new \stdClass(), new \stdClass() );
-
+        $getLocalProperties = \Closure::bind(function ($o) {
+            return get_object_vars($o);
+        }, new dummy(), new dummy());
         return [ 'prototype' => $this->prototype ] + $getLocalProperties( $this );
     }
 
@@ -274,4 +273,13 @@ final class Prototype
             return call_user_func_array( $f, $args );
         }
     }
+}
+
+/**
+ * Class dummy
+ * This class is needed because in PHP7 you can no longer bind to \stdClass
+ * And anonymous classes are syntax errors in PHP5.6, so there.
+ * @package arc\lambda
+ */
+class dummy {
 }
