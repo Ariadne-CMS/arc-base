@@ -11,4 +11,8 @@
 
 namespace arc;
 
+/**
+ * Class UnknownError
+ * @package arc
+ */
 class UnknownError extends \Exception { }
