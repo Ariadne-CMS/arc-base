@@ -9,8 +9,6 @@
      * file that was distributed with this source code.
      */
 
-    require_once( __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php' );
-
     class LambdaTest extends PHPUnit_Framework_TestCase
     {
         function testPrototype()
@@ -21,9 +19,8 @@
                     return $this->foo;
                 }
             ] );
-            $this->assertTrue(false);
-            $this->assertTrue( $view->foo === 'bar' );
-            $this->assertTrue( $view->bar() === 'bar' );
+            $this->assertEquals( $view->foo, 'bar' );
+            $this->assertEquals( $view->bar(), 'bar' );
         }
 
         function testPrototypeInheritance()
@@ -37,10 +34,10 @@
             $bar = $foo->extend( [
                 'foo' => 'rab'
             ]);
-            $this->assertTrue( $foo->foo === 'bar' );
-            $this->assertTrue( $bar->foo === 'rab' );
-            $this->assertTrue( $foo->bar() === 'bar' );
-            $this->assertTrue( $bar->bar() === 'rab' );
+            $this->assertEquals( $foo->foo, 'bar' );
+            $this->assertEquals( $bar->foo, 'rab' );
+            $this->assertEquals( $foo->bar(), 'bar' );
+            $this->assertEquals( $bar->bar(), 'rab' );
             $this->assertTrue( $bar->hasOwnProperty('foo') );
             $this->assertFalse( $bar->hasOwnProperty('bar') );
 
@@ -58,7 +55,7 @@
                     return 'foo'.$foo->bar();
                 }
             ]);
-            $this->assertTrue( $bar->bar() === 'foobar' );
+            $this->assertEquals( $bar->bar(), 'foobar' );
         }
 
         function testPrototypeInheritance3()
@@ -76,7 +73,7 @@
                     return 'foo'.$foo->bar();
                 }
             ]);
-            $this->assertTrue( $bar->foo() === '<b>foobar</b>' );
+            $this->assertEquals( $bar->foo(), '<b>foobar</b>' );
         }
 
         function testSingleton()
@@ -90,8 +87,21 @@
             $test1 = $bar();
             sleep(1);
             $test2 = $bar();
-            $this->assertTrue( $test1 == $test2 );
-            $this->assertTrue( $baz() == 'baz' );
+            $this->assertEquals( $test1, $test2 );
+            $this->assertEquals( $baz(), 'baz' );
+        }
+
+        function testSingletonPrototype()
+        {
+            $bar = \arc\lambda::prototype([
+                'bar' => function () {
+                    return 'bar';
+                },
+                'foo' => \arc\lambda::singleton( function () {
+                    return '<b>'.$this->bar().'</b>';
+                })
+            ]);
+            $this->assertEquals( $bar->foo(), '<b>bar</b>' );
         }
 
         function testPartial()
@@ -101,7 +111,7 @@
             };
             $baz = \arc\lambda::partial( $bar, [ 0 => 'x', 2 => 'z' ] );
             $result = $baz( 'y' );
-            $this->assertTrue( $result == [ 'x' => 'x', 'y' => 'y', 'z' => 'z', 'q' => 1 ] );
+            $this->assertEquals( $result, [ 'x' => 'x', 'y' => 'y', 'z' => 'z', 'q' => 1 ] );
         }
 
         function testPartialPartial()
@@ -111,8 +121,9 @@
             };
             $baz = \arc\lambda::partial( $bar, [ 0 => 'x', 3 => 'q' ], [ 2 => 'z' ] );
             $result = $baz( 'y' );
-            $this->assertTrue( $result == [ 'x' => 'x', 'y' => 'y', 'z' => 'z', 'q' => 'q' ] );
+            $this->assertEquals( $result, [ 'x' => 'x', 'y' => 'y', 'z' => 'z', 'q' => 'q' ] );
         }
+
         function testToString()
         {
             $foo = \arc\lambda::prototype([
@@ -124,7 +135,7 @@
                 },
             ]);
             $tst = (string)$foo;
-            $this->assertTrue( 'foobar' === $tst);
+            $this->assertEquals( 'foobar', $tst);
 
         }
     }

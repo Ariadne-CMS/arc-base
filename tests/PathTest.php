@@ -9,9 +9,7 @@
      * file that was distributed with this source code.
      */
 
-    require_once( __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php' );
-
-    class TestPath extends PHPUnit_Framework_TestCase
+    class PathTest extends PHPUnit_Framework_TestCase
     {
         function testMapReduce()
         {
