@@ -1,9 +1,17 @@
 <?php
-
+/*
+ * This file is part of the Ariadne Component Library.
+ *
+ * (c) Muze <info@muze.nl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace arc;
 
 /**
  * Class hash
+ * Utility methods to work with recursive hashes, setting/getting values and convert hashes to trees.
  * @package arc
  */
 class hash
@@ -20,7 +28,6 @@ class hash
     public static function get($path, $hash, $default = null)
     {
         $result = \arc\path::reduce( $path, function ($result, $item) {
-            $item = rawurldecode($item); //FIXME: this may be unexpected
             if (is_array( $result ) && array_key_exists( $item, $result )) {
                 return $result[$item];
             }
@@ -44,8 +51,16 @@ class hash
         return (is_array($hash) && array_key_exists( $filename, $hash ));
     }
 
+    private static function escape($name) {
+        return str_replace('/','%2F',$name);
+    }
+
+    private static function unescape($name) {
+        return str_replace('%2F','/',$name);
+    }
+
     /**
-     * Parses a name like name[index][index2] to /name/index/index2/
+     * Parse a variable name like 'name[index][index2]' to a key-path like '/name/index/index2/'
      * @param $name The variable name to parse
      * @return string
      */
@@ -60,30 +75,29 @@ class hash
             if ($element[0] === "'") {
                 $element = substr($element, 1, -1);
             }
-            $path[] = rawurlencode($element);
+            $path[] = self::escape($element);
         }
 
         return '/'.implode( '/', $path ).'/';
     }
 
     /**
-     * Compiles a path like /name/index/index2/ to name[index][index2]
-     * @param        $path
+     * Compile a key-path like '/name/index/index2/' to a variable name like 'name[index][index2]'
+     * @param $path
      * @param string $root
      * @return mixed
      */
     public static function compileName($path, $root = '')
     {
         return \arc\path::reduce( $path, function ($result, $item) {
-            $item = rawurldecode($item);
-
+            $item = self::unescape($item);
             return (!$result ? $item : $result . '[' . $item . ']');
         }, $root );
     }
 
     /**
      * Converts a hash to a \arc\tree\NamedNode
-     * @param      $hash
+     * @param $hash
      * @param null $parent
      * @return tree\NamedNode|null
      */
@@ -94,7 +108,7 @@ class hash
         }
         if (is_array( $hash ) || $hash instanceof \Traversable) {
             foreach ($hash as $index => $value) {
-                $child = $parent->appendChild( $index );
+                $child = $parent->appendChild( self::escape($index) );
                 if (is_array( $value )) {
                     self::tree( $value, $child );
                 } else {

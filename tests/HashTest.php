@@ -57,6 +57,15 @@
             $this->assertEquals( $result, '/foo/bar/0/' );
         }
 
+        function testHashWithSlash()
+        {
+            $name = 'foo[bar/baz]';
+            $result = \arc\hash::parseName($name);
+            $this->assertEquals( $result, '/foo/bar%2Fbaz/' );
+            $result = \arc\hash::compileName($result);
+            $this->assertEquals( $result, 'foo[bar/baz]');
+        }
+
         function testTree()
         {
             $hash = [

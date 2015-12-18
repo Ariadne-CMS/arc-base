@@ -1,5 +1,12 @@
 <?php
-
+/*
+ * This file is part of the Ariadne Component Library.
+ *
+ * (c) Muze <info@muze.nl>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 namespace arc\lambda;
 
 /**
@@ -77,8 +84,13 @@ final class Prototype
     public function __construct($properties = [])
     {
         foreach ($properties as $property => $value) {
-            if (!is_numeric( $property )) {
-                $this->{$property} = $this->_bind( $value );
+            if ( !is_numeric( $property ) && $property!='properties' ) {
+                 if ( $property[0] == ':' ) {
+                    $property = substr($property, 1);
+                    $this->{$property} = $value;
+                } else {
+                    $this->{$property} = $this->_bind( $value );
+                }
             }
         }
     }
