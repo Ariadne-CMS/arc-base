@@ -2,8 +2,21 @@
 
 namespace arc;
 
+/**
+ * Class hash
+ * @package arc
+ */
 class hash
 {
+    /**
+     * Returns the value from $hash matching the given path ($path) or
+     * if the path cannot be found in the hash, it returns the default
+     * value ($default).
+     * @param      $path    A list of keys to traverse, seperated by '/'
+     * @param      $hash    The hash to search
+     * @param null $default The default value if the path is not found.
+     * @return mixed|null
+     */
     public static function get($path, $hash, $default = null)
     {
         $result = \arc\path::reduce( $path, function ($result, $item) {
@@ -15,18 +28,29 @@ class hash
         return isset($result) ? $result : $default;
     }
 
+    /**
+     * Checks whether the given path ($path) is available in the hash.
+     * @param $path A list of keys to traverse, seperated by '/'
+     * @param $hash The hash to search
+     * @return bool
+     */
     public static function exists($path, $hash)
     {
+        $path = \arc\path::collapse($path);
         $parent = \arc\path::parent($path);
-        $filename = rawurldecode(basename( $path )); //FIXME: this may be unexpected
+        $filename = basename( $path );
         $hash = self::get( $parent, $hash );
 
         return (is_array($hash) && array_key_exists( $filename, $hash ));
     }
 
+    /**
+     * Parses a name like name[index][index2] to /name/index/index2/
+     * @param $name The variable name to parse
+     * @return string
+     */
     public static function parseName($name)
     {
-        // parse name[index][index2] to /name/index/index2/
         $elements = explode( '[', $name );
         $path = array();
         foreach ($elements as $element) {
@@ -42,9 +66,14 @@ class hash
         return '/'.implode( '/', $path ).'/';
     }
 
+    /**
+     * Compiles a path like /name/index/index2/ to name[index][index2]
+     * @param        $path
+     * @param string $root
+     * @return mixed
+     */
     public static function compileName($path, $root = '')
     {
-        // parse /name/index/index2/ to name[index][index2]
         return \arc\path::reduce( $path, function ($result, $item) {
             $item = rawurldecode($item);
 
@@ -52,6 +81,12 @@ class hash
         }, $root );
     }
 
+    /**
+     * Converts a hash to a \arc\tree\NamedNode
+     * @param      $hash
+     * @param null $parent
+     * @return tree\NamedNode|null
+     */
     public static function tree($hash, $parent = null)
     {
         if (!isset( $parent )) {
