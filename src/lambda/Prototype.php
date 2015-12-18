@@ -131,7 +131,7 @@ final class Prototype
         // the anonymous function / closure is needed to make sure that get_object_vars
         // only returns public properties.
         return ( is_object( $this->prototype )
-            ? array_merge( $this->prototype->properties, $this->getLocalProperties( $this ) )
+            ? array_merge( $this->prototype->properties, $this->getLocalProperties() )
             : $this->getLocalProperties() );
     }
 
