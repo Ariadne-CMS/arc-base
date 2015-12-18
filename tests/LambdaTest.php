@@ -11,7 +11,7 @@
 
     require_once( __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php' );
 
-    class TestLambda extends PHPUnit_Framework_TestCase
+    class LambdaTest extends PHPUnit_Framework_TestCase
     {
         function testPrototype()
         {
@@ -21,6 +21,7 @@
                     return $this->foo;
                 }
             ] );
+            $this->assertTrue(false);
             $this->assertTrue( $view->foo === 'bar' );
             $this->assertTrue( $view->bar() === 'bar' );
         }

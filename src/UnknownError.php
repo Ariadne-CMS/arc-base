@@ -11,4 +11,4 @@
 
 namespace arc;
 
-class ExceptionConfigError extends Exception { }
+class UnknownError extends \Exception { }
