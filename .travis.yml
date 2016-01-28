@@ -11,7 +11,7 @@ matrix:
 before_script:
    - composer install
 
-script: vendor/bin/phpunit --coverage-clover=coverage.clover
+script: vendor/bin/phpunit -d zend.enable_gc=0 --coverage-clover=coverage.clover
 
 notifications:
   email: false
