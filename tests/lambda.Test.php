@@ -76,6 +76,20 @@
             $this->assertEquals( $bar->foo(), '<b>foobar</b>' );
         }
 
+        function testExceptions()
+        {
+            $foo = \arc\lambda::prototype([
+                'foo' => 'bar'
+            ]);
+            $error = false;
+            try {
+                $foo->bar();
+            } catch ( \Exception $e ) {
+                $error = $e;
+            }
+            $this->assertInstanceOf( '\arc\MethodNotFound', $error );
+        }
+
         function testSingleton()
         {
             $bar = \arc\lambda::singleton( function () {
