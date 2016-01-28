@@ -9,7 +9,7 @@
      * file that was distributed with this source code.
      */
 
-    class PathTest extends PHPUnit_Framework_TestCase
+    class TestPath extends PHPUnit_Framework_TestCase
     {
         function testMapReduce()
         {

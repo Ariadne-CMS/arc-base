@@ -10,7 +10,7 @@
      * file that was distributed with this source code.
      */
 
-    class HashTest extends PHPUnit_Framework_TestCase
+    class TestHash extends PHPUnit_Framework_TestCase
     {
         function testHashGet()
         {

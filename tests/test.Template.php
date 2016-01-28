@@ -9,8 +9,7 @@
      * file that was distributed with this source code.
      */
 
-
-    class TemplateTest extends PHPUnit_Framework_TestCase
+    class TestTemplate extends PHPUnit_Framework_TestCase
     {
         function testSimpleSubstitution()
         {

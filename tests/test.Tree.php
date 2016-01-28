@@ -9,7 +9,7 @@
      * file that was distributed with this source code.
      */
 
-    class TreeTest extends PHPUnit_Framework_TestCase
+    class TestTree extends PHPUnit_Framework_TestCase
     {
         function testExpand()
         {
