@@ -99,7 +99,7 @@ final class Prototype
      * @param $name
      * @param $args
      * @return mixed
-     * @throws \arc\ExceptionMethodNotFound
+     * @throws \arc\MethodNotFound
      */
     public function __call($name, $args)
     {
@@ -111,7 +111,7 @@ final class Prototype
                 return call_user_func_array( $method, $args );
             }
         }
-        throw new \arc\ExceptionMethodNotFound( $name.' is not a method on this Object', \arc\exceptions::OBJECT_NOT_FOUND );
+        throw new \arc\MethodNotFound( $name.' is not a method on this Object', \arc\exceptions::OBJECT_NOT_FOUND );
     }
 
     /**
@@ -223,14 +223,14 @@ final class Prototype
 
     /**
      * @return mixed
-     * @throws \arc\ExceptionMethodNotFound
+     * @throws \arc\MethodNotFound
      */
     public function __invoke()
     {
         if (is_callable( $this->__invoke )) {
             return call_user_func_array( $this->__invoke, func_get_args() );
         } else {
-            throw new \arc\ExceptionMethodNotFound( 'No __invoke method found in this Object', \arc\exceptions::OBJECT_NOT_FOUND );
+            throw new \arc\MethodNotFound( 'No __invoke method found in this Object', \arc\exceptions::OBJECT_NOT_FOUND );
         }
     }
 
