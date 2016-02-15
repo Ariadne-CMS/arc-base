@@ -1,6 +1,6 @@
 <?php
     // performance test
-    require_once( __DIR__.'/../bootstrap.php' );
+    require_once( __DIR__.'/../../src/path.php');
 
     // 100.000 times the same path - 1.9s naive implementation - 0.12s with cache
     $inputPath = 'a/../path//going/../somewhere';
