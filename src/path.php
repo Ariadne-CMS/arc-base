@@ -70,28 +70,23 @@ class path
             $path = $cwd . '/' . $path;
         }
         if (isset( self::$collapseCache[$path] )) { // cache hit - so return that
-
             return self::$collapseCache[$path];
         }
+
         $tempPath = str_replace('\\', '/', (string) $path);
         $collapsedPath = self::reduce(
             $tempPath,
             function ($result, $entry) {
-                switch ($entry) {
-                    case '..':
-                        $result = dirname( $result );
-                        if (isset($result[1])) { // fast check to see if there is a dirname
-                            $result .= '/';
-                        }
-                        $result[0] = '/'; // php has a bug in dirname('/') -> returns a '\\' in windows
-                        break;
-                    case '.':
-                        break;
-                    default:
-                        $result .= $entry .'/';
-                        break;
+                if ($entry == '..' ) {
+                    $result = dirname( $result );
+                    if (isset($result[1])) { // fast check to see if there is a dirname
+                        $result .= '/';
+                    } else {
+                        $result = '/';
+                    }
+                } else if ($entry !== '.') {
+                    $result .= $entry .'/';
                 }
-
                 return $result;
             },
             '/' // initial value, always start paths with a '/'
@@ -250,9 +245,7 @@ class path
 
     protected static function getSplitPath($path)
     {
-        return array_filter( explode( '/', $path ), function ($entry) {
-            return ( isset( $entry ) && $entry !== '' );
-        });
+        return preg_split('|/|', $path, -1, PREG_SPLIT_NO_EMPTY);
     }
 
     /**
