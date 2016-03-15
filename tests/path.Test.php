@@ -79,7 +79,9 @@
             $parents = \arc\path::parents('/test/foo/','/test/');
             $this->assertEquals( $parents, array( '/test/', '/test/foo/'));
             $parents = \arc\path::parents('/test/','/tost/');
-            $this->assertEquals( $parents, array( '/tost/'));
+            $this->assertEquals( $parents, []);
+            $parents = \arc\path::parents('/test/','/test/foo/');
+            $this->assertEquals( $parents , []);
         }
 
         function testParent()
