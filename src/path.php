@@ -32,17 +32,19 @@ class path
      */
     public static function parents($path, $root = '/')
     {
-        // returns all parents starting at the root, up to and including the path itself
-        $prevpath = '/';
-        $parents = self::reduce( $path, function ($result, $entry) use ($root, &$prevpath) {
-            $prevpath .= $entry . '/';
-            if (strpos( $prevpath, $root ) === 0 && $prevpath !== $root) {
-                // Add only parents below the root
-                $result[] = $prevpath;
-            }
+        // remove root
+        $parents = [];
+        if(strpos( $path, $root ) === 0 ) {
+            $subpath = substr($path, strlen($root));
+            // returns all parents starting at the root, up to and including the path itself
+            $prevpath = '';
+            $parents = self::reduce( $subpath, function ($result, $entry) use ($root, &$prevpath) {
+                $prevpath .= $entry . '/';
+                $result[] = $root . $prevpath;
 
-            return $result;
-        }, array( $root ) );
+                return $result;
+            }, [ $root ] );
+        }
 
         return $parents;
     }
