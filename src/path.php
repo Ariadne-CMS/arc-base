@@ -29,6 +29,7 @@ class path
      *	@param string $root The root or topmost parent to return. Defaults to '/'.
      *	@return array Array of all parent paths, starting at the root and ending with the given path.
      *		Note: It includes the given path!
+     *		Note: when $path is not a child of $root, and empty array is returned
      */
     public static function parents($path, $root = '/')
     {
