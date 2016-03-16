@@ -33,9 +33,8 @@ class path
      */
     public static function parents($path, $root = '/')
     {
-        // remove root
         $parents = [];
-        if(strpos( $path, $root ) === 0 ) {
+        if (self::isChild($path, $root)) {
             $subpath = substr($path, strlen($root));
             // returns all parents starting at the root, up to and including the path itself
             $prevpath = '';
