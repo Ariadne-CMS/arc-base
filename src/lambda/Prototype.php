@@ -246,6 +246,11 @@ final class Prototype
         $this->_tryToCall( $this->__clone );
     }
 
+    public function _hasMethod($name)
+    {
+        return isset($this->{$name}) && is_callable($this->{$name});
+    }
+
     /**
      * Binds the property to this object
      * @param $property

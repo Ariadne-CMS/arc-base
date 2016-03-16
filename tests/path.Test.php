@@ -61,15 +61,15 @@
 
         function testCollapse()
         {
-            $this->assertTrue( \arc\path::collapse('/') === '/' );
-            $this->assertTrue( \arc\path::collapse('/test/') === '/test/' );
-            $this->assertTrue( \arc\path::collapse('/test//') === '/test/' );
-            $this->assertTrue( \arc\path::collapse('/test/../') === '/' );
-            $this->assertTrue( \arc\path::collapse('test') === '/test/' );
-            $this->assertTrue( \arc\path::collapse( '../', '/test/') === '/' );
-            $this->assertTrue( \arc\path::collapse( '..', '/test/foo/') === '/test/' );
-            $this->assertTrue( \arc\path::collapse( '/..//../', '/test/') === '/' );
-            $this->assertTrue( \arc\path::collapse( '', '/test/') === '/test/' );
+            $this->assertEquals( '/',      \arc\path::collapse('/'));
+            $this->assertEquals( '/test/', \arc\path::collapse('/test/'));
+            $this->assertEquals( '/test/', \arc\path::collapse('/test//'));
+            $this->assertEquals( '/',      \arc\path::collapse('/test/../'));
+            $this->assertEquals( '/test/', \arc\path::collapse('test'));
+            $this->assertEquals( '/',      \arc\path::collapse( '../', '/test/'));
+            $this->assertEquals( '/test/', \arc\path::collapse( '..', '/test/foo/'));
+            $this->assertEquals( '/',      \arc\path::collapse( '/..//../', '/test/'));
+            $this->assertEquals( '/test/', \arc\path::collapse( '', '/test/'));
         }
 
         function testParents()

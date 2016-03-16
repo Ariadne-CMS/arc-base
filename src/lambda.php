@@ -62,7 +62,7 @@ class lambda
      * @param $properties
      * @return lambda\Prototype
      */
-    public static function prototype($properties)
+    public static function prototype($properties = [])
     {
         // do not ever use a single prototype for every other lambda\Prototype
         // it will allow evil stuff with state shared across everything
@@ -124,4 +124,94 @@ class lambda
     {
         return singleton($f);
     }
+
+    /**
+     * Returns a proxy that prevents the target objects property list from
+     * being changed. You can still change existing properties, but you can
+     * not remove or add properties. Methods in the target object can still
+     * do this.
+     * @param object $ob
+     * @return lambda\Guard
+     */
+    public static function seal($ob) {
+        return new lambda\Guard($ob, 'seal');
+    }
+
+    /**
+     * Returns a proxy that prevents the target object from changing. Property
+     * changes (setting or unsetting) is disabled, calling methods creates a 
+     * clone and calls the method there and returns the result or the proxy
+     * if the result is the target object. Doesn't intercept __get, so 
+     * theoretically the object can still change... but thats just wrong
+     * @param object $ob
+     * @return lambda\Guard
+     */
+    public static function freeze($ob) {
+        return new lambda\Guard($ob, 'freeze');
+    }
+
+    /**
+     * Returns a proxy that calls an observer for any change in the properties
+     * of the target object. The observer function must accept an array of changes
+     * with the following contents
+     * - 'type' => 'add','update' or 'delete'
+     * - 'object' => the target object
+     * - 'name' => the name of the property changed
+     * - 'oldValue' => the previous value, if available
+     * @param object $ob
+     * @param callable $f
+     * @return lambda\Observe
+     */
+    public static function observe($ob, $f) {
+        if ( method_exists($ob, '_addObserver') ) {
+            $ob->_addObserver($f);
+            return $ob;
+        } else {
+            return new lambda\Observe($ob, $f);
+        }
+    }
+
+    /**
+     * Removes an observer from an object and returns the object.
+     * @param object $ob
+     * @param callable $f The observer function to remove
+     * @return lambda\Observe
+     */
+    public static function unobserve($ob, $f) {
+        if ( method_exists($ob, '_removeObserver') ) {
+            $ob->_removeObserver($f);
+        }
+        return $ob;
+    }
+
+    /**
+     * Returns a proxy that allows a protector function to check whether a
+     * specific access to the target should be allowed.
+     * For each get, set, unset, isset and call to a method, the protector 
+     * method is called with up to three arguments:
+     * - $type 'get','set','unset','isset' or 'call'
+     * - $name the name of the property or method
+     * - $value the new value or the parameters to the method as an array
+     * @param object $ob
+     * @param callable $f
+     * @return lambda\Protect
+     */
+    public static function protect($ob, $f) {
+        return new lambda\Protect($ob, $f);
+    }
+
+    public static function isFrozen($ob) {
+        if ( method_exists($ob, '_isGuarded') ) {
+            return $ob->_isGuarded('freeze');
+        }
+        return false;
+    }
+
+    public static function isSealed($ob) {
+        if ( method_exists($ob, '_isGuarded') ) {
+            return $ob->_isGuarded('seal');
+        }
+        return false;
+    }
+
 }

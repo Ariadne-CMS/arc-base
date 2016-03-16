@@ -60,41 +60,30 @@ class path
      *	@param string $cwd The current working directory. For relative paths this is the starting point.
      *	@return string The absolute path, without '..', '.' or '//' entries.
      */
-    public static function collapse($path, $cwd = '/')
+    public static function collapse($path, $cwd = null)
     {
         // removes '.', changes '//' to '/', changes '\\' to '/', calculates '..' up to '/'
-        if (!isset($path[0])) {
+        if ( $path instanceof \arc\path\Value ) {
+            return $path;
+        }
+        if ( !isset($path[0]) ) {
             return $cwd;
         }
-        if ($path[0] !== '/' && $path[0] !== '\\') {
+        if ( isset($cwd) && $cwd && $path[0] !== '/' && $path[0] !== '\\' ) {
             $path = $cwd . '/' . $path;
         }
-        if (isset( self::$collapseCache[$path] )) { // cache hit - so return that
+        if ( isset(self::$collapseCache[$path]) ) { // cache hit - so return that
             return self::$collapseCache[$path];
+        } else {
+            $value = new \arc\path\Value($path);
+            if ( isset(self::$collapseCache[(string)$value]) ) {
+                self::$collapseCache[$path] = self::$collapseCache[(string)$value];
+                return self::$collapseCache[(string)$value];
+            } else {
+                self::$collapseCache[$path] = self::$collapseCache[(string) $value] = $value;
+                return $value;
+            }
         }
-
-        $tempPath = str_replace('\\', '/', (string) $path);
-        $collapsedPath = self::reduce(
-            $tempPath,
-            function ($result, $entry) {
-                if ($entry == '..' ) {
-                    $result = dirname( $result );
-                    if (isset($result[1])) { // fast check to see if there is a dirname
-                        $result .= '/';
-                    } else {
-                        $result = '/';
-                    }
-                } else if ($entry !== '.') {
-                    $result .= $entry .'/';
-                }
-                return $result;
-            },
-            '/' // initial value, always start paths with a '/'
-        );
-        // store the collapsed path in the cache, improves performance by factor > 10.
-        self::$collapseCache[$path] = $collapsedPath;
-
-        return $collapsedPath;
     }
 
     /**
