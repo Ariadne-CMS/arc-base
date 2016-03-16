@@ -232,6 +232,9 @@ class path
      */
     public static function isChild($path, $parent)
     {
+        $parent = self::collapse($parent);
+        $path   = self::collapse($path, $parent);
+
         return ( strpos( $path, $parent ) === 0 );
     }
 
