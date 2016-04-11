@@ -17,22 +17,22 @@
             $result = \arc\path::map( $path, function ($entry) {
                 return strtoupper($entry);
             });
-            $this->assertTrue( $result === '/A/B/C/' );
+            $this->assertEquals( '/A/B/C/', $result);
 
             $result = \arc\path::reduce( $path, function (&$result, $entry) {
                 return $result.$entry;
             });
-            $this->assertTrue( $result === 'abc' );
+            $this->assertEquals( $result, 'abc' );
 
             $result = \arc\path::map( '/', function ($entry) {
                 return 'a';
             });
-            $this->assertTrue( $result === '/' );
+            $this->assertEquals( '/', $result);
 
             $result = \arc\path::map( 'frop', function ($entry) {
                 return 'a';
             });
-            $this->assertTrue( $result === '/a/' );
+            $this->assertEquals( '/a/', $result);
         }
 
         function testSearch()
@@ -46,7 +46,7 @@
                 }
             });
             $this->assertTrue( $result );
-            $this->assertTrue( $count == 2 );
+            $this->assertEquals( 2, $count);
 
             $count = 0;
             $result = \arc\path::search( $path, function ($parent) use (&$count) {
@@ -56,50 +56,55 @@
                 }
             }, false ); // reverse order
             $this->assertTrue( $result );
-            $this->assertTrue( $count == 3 );
+            $this->assertEquals( 3, $count);
         }
 
         function testCollapse()
         {
-            $this->assertTrue( \arc\path::collapse('/') === '/' );
-            $this->assertTrue( \arc\path::collapse('/test/') === '/test/' );
-            $this->assertTrue( \arc\path::collapse('/test//') === '/test/' );
-            $this->assertTrue( \arc\path::collapse('/test/../') === '/' );
-            $this->assertTrue( \arc\path::collapse('test') === '/test/' );
-            $this->assertTrue( \arc\path::collapse( '../', '/test/') === '/' );
-            $this->assertTrue( \arc\path::collapse( '..', '/test/foo/') === '/test/' );
-            $this->assertTrue( \arc\path::collapse( '/..//../', '/test/') === '/' );
-            $this->assertTrue( \arc\path::collapse( '', '/test/') === '/test/' );
+            $this->assertEquals( '/', \arc\path::collapse('/'));
+            $this->assertEquals( '/test/', \arc\path::collapse('/test/'));
+            $this->assertEquals( '/test/', \arc\path::collapse('/test//'));
+            $this->assertEquals( '/', \arc\path::collapse('/test/../'));
+            $this->assertEquals( '/test/', \arc\path::collapse('test'));
+            $this->assertEquals( '/', \arc\path::collapse( '../', '/test/'));
+            $this->assertEquals( '/test/', \arc\path::collapse( '..', '/test/foo/'));
+            $this->assertEquals( '/', \arc\path::collapse( '/..//../', '/test/'));
+            $this->assertEquals( '/test/', \arc\path::collapse( '', '/test/'));
         }
 
         function testParents()
         {
             $parents = \arc\path::parents('/test/');
-            $this->assertTrue( $parents == array('/','/test/'));
+            $this->assertEquals( $parents, array('/','/test/'));
+
             $parents = \arc\path::parents('/test/foo/','/test/');
-            $this->assertTrue( $parents == array( '/test/', '/test/foo/'));
+            $this->assertEquals( $parents, array( '/test/', '/test/foo/'));
+
             $parents = \arc\path::parents('/test/','/tost/');
-            $this->assertTrue( $parents == array( '/tost/') );
+            $this->assertEquals( $parents, []);
+
+            $parents = \arc\path::parents('/test/','/test/foo/');
+            $this->assertEquals( $parents , []);
         }
 
         function testParent()
         {
-            $this->assertTrue( \arc\path::parent('/') == null );
-            $this->assertTrue( \arc\path::parent('/test/') == '/');
-            $this->assertTrue( \arc\path::parent('/a/b/') == '/a/');
-            $this->assertTrue( \arc\path::parent('/a/b/', '/a/b/') == null );
-            $this->assertTrue( \arc\path::parent('/a/b/', '/a/') == '/a/' );
-            $this->assertTrue( \arc\path::parent('/a/b/', '/test/') == null );
+            $this->assertNull( \arc\path::parent('/'));
+            $this->assertEquals( '/', \arc\path::parent('/test/'));
+            $this->assertEquals( '/a/', \arc\path::parent('/a/b/'));
+            $this->assertNull( \arc\path::parent('/a/b/', '/a/b/'));
+            $this->assertEquals( '/a/', \arc\path::parent('/a/b/', '/a/'));
+            $this->assertNull( \arc\path::parent('/a/b/', '/test/'));
         }
 
         function testClean()
         {
-            $this->assertTrue( \arc\path::clean('/a/b/') == '/a/b/' );
-            $this->assertTrue( \arc\path::clean(' ') == '/%20/' );
-            $this->assertTrue( \arc\path::clean('/#/') == '/%23/');
-            $this->assertTrue( \arc\path::clean('/an a/', function ($filename) {
+            $this->assertEquals( '/a/b/', \arc\path::clean('/a/b/'));
+            $this->assertEquals( '/%20/', \arc\path::clean(' '));
+            $this->assertEquals( '/%23/', \arc\path::clean('/#/'));
+            $this->assertEquals( '/n /', \arc\path::clean('/an a/', function ($filename) {
                 return str_replace( 'a','', $filename );
-            }) == '/n /');
+            }));
         }
 
         function testIsChild()
@@ -110,7 +115,7 @@
 
         function testDiff()
         {
-            $this->assertTrue( \arc\path::diff( '/a/', '/a/b/' ) == 'b/' );
-            $this->assertTrue( \arc\path::diff( '/a/', '/b/' ) == '../b/' );
+            $this->assertEquals( 'b/', \arc\path::diff( '/a/', '/a/b/' ));
+            $this->assertEquals( '../b/', \arc\path::diff( '/a/', '/b/' ));
         }
     }

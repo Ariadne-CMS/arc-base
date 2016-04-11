@@ -16,7 +16,7 @@
             $template = 'Hello {$someone}';
             $args = [ 'someone' => 'World!' ];
             $parsed = \arc\template::substitute( $template, $args );
-            $this->assertTrue( $parsed === 'Hello World!' );
+            $this->assertEquals( 'Hello World!', $parsed );
         }
 
         function testFunctionSubstitution()
@@ -24,7 +24,7 @@
             $template = 'Hello {$someone}';
             $args = [ 'someone' => function () { return 'World!'; } ];
             $parsed = \arc\template::substitute( $template, $args );
-            $this->assertTrue( $parsed === 'Hello World!' );
+            $this->assertEquals( 'Hello World!', $parsed );
         }
 
         function testPartialSubstitution()
@@ -32,7 +32,7 @@
             $template = 'Hello {$someone} from {$somewhere}';
             $args = [ 'someone' => 'World!' ];
             $parsed = \arc\template::substitute( $template, $args );
-            $this->assertTrue( $parsed === 'Hello World! from {$somewhere}' );
+            $this->assertEquals( 'Hello World! from {$somewhere}', $parsed );
         }
 
         function testSubstituteAll()
@@ -40,7 +40,7 @@
             $template = 'Hello {$someone} from {$somewhere}';
             $args = [ 'someone' => 'World!' ];
             $parsed = \arc\template::substituteAll( $template, $args );
-            $this->assertTrue( $parsed === 'Hello World! from ' );
+            $this->assertEquals( 'Hello World! from ', $parsed);
         }
 
         function testCompile()
@@ -48,7 +48,7 @@
             $template = 'Foo <?php echo $bar; ?>.';
             $compiled = \arc\template::compile( $template );
             $parsed = $compiled([ 'bar' => 'Bar' ]);
-            $this->assertTrue( $parsed === 'Foo Bar.' );
+            $this->assertEquals( 'Foo Bar.',  $parsed );
         }
 
         function testCompileSubstitute()
@@ -56,6 +56,6 @@
             $template = 'Hello {$someone} from {$somewhere}';
             $compiled = \arc\template::compileSubstitute( $template );
             $parsed = $compiled([ 'someone' => 'you', 'somewhere' => 'Earth' ]);
-            $this->assertTrue( $parsed == 'Hello you from Earth' );
+            $this->assertEquals( 'Hello you from Earth',  $parsed );
         }
     }

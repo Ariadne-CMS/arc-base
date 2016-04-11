@@ -23,10 +23,10 @@
             $this->assertEquals( $result, $hash['foo']['bar'] );
 
             $result = \arc\hash::get( '/foo/baz/', $hash );
-            $this->assertTrue( $result === null );
+            $this->assertNull( $result );
 
             $result = \arc\hash::get( '/foo/baz/', $hash, 'default' );
-            $this->assertTrue( $result === 'default' );
+            $this->assertEquals( 'default', $result );
 
         }
 
@@ -47,23 +47,23 @@
         {
             $path = '/foo/bar/0/';
             $result = \arc\hash::compileName( $path );
-            $this->assertEquals( $result, 'foo[bar][0]' );
+            $this->assertEquals( 'foo[bar][0]', $result );
         }
 
         function testHashParse()
         {
             $name = 'foo[bar][0]';
             $result = \arc\hash::parseName( $name );
-            $this->assertEquals( $result, '/foo/bar/0/' );
+            $this->assertEquals( '/foo/bar/0/', $result );
         }
 
         function testHashWithSlash()
         {
             $name = 'foo[bar/baz]';
             $result = \arc\hash::parseName($name);
-            $this->assertEquals( $result, '/foo/bar%2Fbaz/' );
+            $this->assertEquals( '/foo/bar%2Fbaz/', $result );
             $result = \arc\hash::compileName($result);
-            $this->assertEquals( $result, 'foo[bar/baz]');
+            $this->assertEquals( 'foo[bar/baz]', $result);
         }
 
         function testTree()
@@ -75,7 +75,7 @@
             ];
             $node = \arc\hash::tree( $hash );
             $tree = \arc\tree::collapse( $node );
-            $this->assertEquals( $tree, [ '/foo/bar/' => 'This is a bar' ] );
+            $this->assertEquals( [ '/foo/bar/' => 'This is a bar' ], $tree );
         }
 
     }

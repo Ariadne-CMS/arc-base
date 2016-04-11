@@ -29,20 +29,22 @@ class path
      *	@param string $root The root or topmost parent to return. Defaults to '/'.
      *	@return array Array of all parent paths, starting at the root and ending with the given path.
      *		Note: It includes the given path!
+     *		Note: when $path is not a child of $root, and empty array is returned
      */
     public static function parents($path, $root = '/')
     {
-        // returns all parents starting at the root, up to and including the path itself
-        $prevpath = '/';
-        $parents = self::reduce( $path, function ($result, $entry) use ($root, &$prevpath) {
-            $prevpath .= $entry . '/';
-            if (strpos( $prevpath, $root ) === 0 && $prevpath !== $root) {
-                // Add only parents below the root
-                $result[] = $prevpath;
-            }
+        $parents = [];
+        if (self::isChild($path, $root)) {
+            $subpath = substr($path, strlen($root));
+            // returns all parents starting at the root, up to and including the path itself
+            $prevpath = '';
+            $parents = self::reduce( $subpath, function ($result, $entry) use ($root, &$prevpath) {
+                $prevpath .= $entry . '/';
+                $result[] = $root . $prevpath;
 
-            return $result;
-        }, array( $root ) );
+                return $result;
+            }, [ $root ] );
+        }
 
         return $parents;
     }
@@ -230,6 +232,9 @@ class path
      */
     public static function isChild($path, $parent)
     {
+        $parent = self::collapse($parent);
+        $path   = self::collapse($path, $parent);
+
         return ( strpos( $path, $parent ) === 0 );
     }
 

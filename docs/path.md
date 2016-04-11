@@ -108,7 +108,7 @@ This method will return the parent path string of the given input path, provided
 <?php
     $parents = \arc\path::parents( $inputPath, '/root/' );
 ```
-This method will return an array of valid parent paths. It will start at the root and end with the input path. It will not normalize the input path for you. It will always at least return the root path.
+This method will return an array of valid parent paths. It will start at the root and end with the input path. If $path is not a child of $root an empty array wil be returned.
 
 ```php5
 <?php
