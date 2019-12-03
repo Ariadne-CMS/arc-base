@@ -37,13 +37,13 @@ arc/base contains
 - [hash](docs/hash.md): methods to ease common tasks with nested hashes
 - template: simple php based templates, with compile option
 - [context](docs/context.md): nested scope or stackable DI container
-- [lambda](docs/lambda.md): prototypical inheritance, ad hoc objects and partial function application
-- Proxy trait
+- [lambda](docs/lambda.md): partial function application
+- prototype: prototypical inheritance like javascript
 
 Example code
 ------------
 
-###\arc\path
+### \arc\path
 
     \arc\path::collapse( '../', '/current/directory/' );
     // => '/current/'
@@ -70,7 +70,7 @@ Example code
     }, '\\' );
     // => '\\a\\b\\';
 
-###\arc\tree
+### \arc\tree
 
     $tree = \arc\tree::expand([
         '/' => 'Root',
@@ -93,7 +93,7 @@ Example code
     });
     // => [ '/foo/bar/' => 'Bar' ]
 
-###\arc\hash
+### \arc\hash
 
     \arc\hash::get( '/foo/bar/', [ 'foo' => [ 'bar' => 'baz' ] ] );
     // => 'baz'
@@ -114,9 +114,9 @@ Example code
     );
     // => [ '/foo/bar/' => 'A bar', '/foo/baz/' => 'Not a bar' ]
 
-###\arc\lambda
+### \arc\prototype
 
-    $di = \arc\lambda::prototype([
+    $di = \arc\prototype::create([
          'dsn'      => 'mysql:dbname=testdb;host=127.0.0.1';
          'user'     => 'dbuser',
          'password' => 'dbpassword',

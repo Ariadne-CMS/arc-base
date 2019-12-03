@@ -11,84 +11,6 @@
 
     class TestLambda extends PHPUnit_Framework_TestCase
     {
-        function testPrototype()
-        {
-            $view = \arc\lambda::prototype( [
-                'foo' => 'bar',
-                'bar' => function () {
-                    return $this->foo;
-                }
-            ] );
-            $this->assertEquals( $view->foo, 'bar' );
-            $this->assertEquals( $view->bar(), 'bar' );
-        }
-
-        function testPrototypeInheritance()
-        {
-            $foo = \arc\lambda::prototype( [
-                'foo' => 'bar',
-                'bar' => function () {
-                    return $this->foo;
-                }
-            ]);
-            $bar = $foo->extend( [
-                'foo' => 'rab'
-            ]);
-            $this->assertEquals( $foo->foo, 'bar' );
-            $this->assertEquals( $bar->foo, 'rab' );
-            $this->assertEquals( $foo->bar(), 'bar' );
-            $this->assertEquals( $bar->bar(), 'rab' );
-            $this->assertTrue( $bar->hasOwnProperty('foo') );
-            $this->assertFalse( $bar->hasOwnProperty('bar') );
-
-        }
-
-        function testPrototypeInheritance2()
-        {
-            $foo = \arc\lambda::prototype([
-                'bar' => function () {
-                    return 'bar';
-                }
-            ]);
-            $bar = $foo->extend([
-                'bar' => function () use ($foo) {
-                    return 'foo'.$foo->bar();
-                }
-            ]);
-            $this->assertEquals( $bar->bar(), 'foobar' );
-        }
-
-        function testPrototypeInheritance3()
-        {
-            $foo = \arc\lambda::prototype([
-                'bar' => function () {
-                    return 'bar';
-                },
-                'foo' => function () {
-                    return '<b>'.$this->bar().'</b>';
-                }
-            ]);
-            $bar = $foo->extend([
-                'bar' => function () use ($foo) {
-                    return 'foo'.$foo->bar();
-                }
-            ]);
-            $this->assertEquals( $bar->foo(), '<b>foobar</b>' );
-        }
-
-        function testExceptions()
-        {
-            $foo = \arc\lambda::prototype([
-                'foo' => 'bar'
-            ]);
-            $error = false;
-            try {
-                $foo->bar();
-            } catch ( \Exception $e ) {
-                $error = $e;
-            }
-            $this->assertInstanceOf( '\arc\MethodNotFound', $error );
-        }
 
         function testSingleton()
         {
@@ -103,19 +25,6 @@
             $test2 = $bar();
             $this->assertEquals( $test1, $test2 );
             $this->assertEquals( $baz(), 'baz' );
-        }
-
-        function testSingletonPrototype()
-        {
-            $bar = \arc\lambda::prototype([
-                'bar' => function () {
-                    return 'bar';
-                },
-                'foo' => \arc\lambda::singleton( function () {
-                    return '<b>'.$this->bar().'</b>';
-                })
-            ]);
-            $this->assertEquals( $bar->foo(), '<b>bar</b>' );
         }
 
         function testPartial()
@@ -148,17 +57,4 @@
             $this->assertTrue($result);
         }
 
-        function testToString()
-        {
-            $foo = \arc\lambda::prototype([
-                'foofoo' => function () {
-                    return 'foofoo';
-                },
-                '__toString' => function () {
-                    return 'foobar';
-                },
-            ]);
-            $tst = (string)$foo;
-            $this->assertEquals( 'foobar', $tst);
-        }
     }
