@@ -15,7 +15,7 @@ namespace arc\tree;
  * @property \arc\tree\NamedNode $parentNode
  * @property string $nodeName
  */
-class NamedNode implements \Serializable
+class NamedNode extends Node implements \Serializable
 {
     public $nodeValue = null;
     private $parentNode = null;
