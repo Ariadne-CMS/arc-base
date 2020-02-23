@@ -29,7 +29,7 @@ class context
      */
     public static function push($params)
     {
-        self::$context = self::$context->extend( $params );
+        self::$context = \arc\prototype::extend(self::$context, $params );
     }
 
     /**
