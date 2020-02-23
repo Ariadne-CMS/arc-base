@@ -143,7 +143,7 @@ class path
             $parent .= '/';
         }
         $parent[0] = '/'; // dirname('/something/') returns '\' in windows.
-        if (strpos( $parent, $root ) !== 0) { // parent is outside of the root
+        if (strpos( (string)$parent, (string)$root ) !== 0) { // parent is outside of the root
 
             return null;
         }
@@ -167,7 +167,7 @@ class path
             $path = '/' . $path;
         }
 
-        return substr( $path, 1, strpos( $path, '/', 1) - 1 );
+        return substr( (string)$path, 1, strpos( (string)$path, '/', 1) - 1 );
     }
 
     /**
@@ -185,7 +185,7 @@ class path
             $path = '/' . $path;
         }
 
-        return substr( $path, strpos( $path, '/', 1) );
+        return substr( (string)$path, strpos( (string)$path, '/', 1) );
     }
 
     /**
@@ -223,8 +223,7 @@ class path
     {
         $parent = self::collapse($parent);
         $path   = self::collapse($path, $parent);
-
-        return ( strpos( $path, $parent ) === 0 );
+        return ( strpos( (string)$path, (string)$parent ) === 0 );
     }
 
     /**
