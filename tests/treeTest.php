@@ -21,7 +21,7 @@
 
             $expandedTree = \arc\tree::expand( $collapsedTree );
             $recollapsedTree = \arc\tree::collapse( $expandedTree );
-            $this->assertTrue( $collapsedTree == $recollapsedTree );
+            $this->assertEquals( $collapsedTree,  $recollapsedTree );
             //not a requirement: $this->assertFalse( $collapsedTree === $recollapsedTree );
         }
 
@@ -33,7 +33,7 @@
                 $node = $node->appendChild($i, $i);
             }
             $arr = \arc\tree::collapse( $root );
-            $this->assertTrue( count($arr) == 225 );
+            $this->assertEquals(225, count($arr));
         }
 
         function testAppend()
@@ -42,10 +42,10 @@
             $tree->childNodes['foo'] = 'bar';
             $tree->cd('/foo/')->appendChild('test', 'a test');
             $collapsed = \arc\tree::collapse( $tree );
-            $this->assertTrue( $collapsed == array(
+            $this->assertEquals( array(
                 '/foo/' => 'bar',
                 '/foo/test/' => 'a test'
-            ));
+            ), $collapsed);
         }
 
         function testClone()
@@ -54,13 +54,13 @@
             $tree->childNodes['foo'] = 'bar';
             $clone = clone $tree;
             $clone->childNodes['foo'] = 'foo';
-            $this->assertTrue( $tree !== $clone );
-            $this->assertTrue( $tree->childNodes !== $clone->childNodes );
+            $this->assertNotEquals( $tree, $clone );
+            $this->assertNotEquals( $tree->childNodes, $clone->childNodes );
             $foo1 = $tree->cd('/foo/');
             $foo2 = $clone->cd('/foo/');
-            $this->assertTrue( $foo1 !== $foo2 );
-            $this->assertTrue( $tree->childNodes['foo'] == 'bar' );
-            $this->assertTrue( $clone->childNodes['foo'] == 'foo' );
+            $this->assertNotEquals( $foo1, $foo2 );
+            $this->assertEquals('bar', $tree->childNodes['foo'] );
+            $this->assertEquals('foo', $clone->childNodes['foo'] );
         }
 
         function testCD()
@@ -72,7 +72,7 @@
             );
             $tree = \arc\tree::expand($collapsed);
             $bar = $tree->cd('bar'); //childNodes['bar'];
-            $this->assertTrue( $bar->cd('/foo/test/') == 'a test' );
+            $this->assertEquals( 'a test', $bar->cd('/foo/test/') );
         }
 
         function testAutoCreateCD()
@@ -80,7 +80,7 @@
             $tree = \arc\tree::expand();
             $tree->cd('foo')->nodeValue = 'bar';
             $collapsed = \arc\tree::collapse($tree);
-            $this->assertTrue( $collapsed == array( '/foo/' => 'bar' ) );
+            $this->assertEquals( array( '/foo/' => 'bar' ), $collapsed  );
         }
 
 

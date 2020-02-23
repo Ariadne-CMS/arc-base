@@ -11,7 +11,6 @@ This component provides a few utility methods that ease working with filesystem-
 This method will filter each filename part of the input path with the given filter. You can specify any filter that `filter_var` accepts and the same for the flags.
 
 ```php
-<?php
     \arc\path::clean( '/a space/with"quotes/' ); // => '/a%20space/with%34quotes/'
     \arc\path::clean( '/a space/', FILTER_SANITIZE_URL ); // '/aspace/with"quotes/'
 ```
@@ -21,7 +20,6 @@ Or you can specify a callback method in place of $filter. This will do exactly t
     (string) \arc\path::collapse( $path, $cwd = '/' )
 
 ```php
-<?php
     $absolutePath = \arc\path::collapse( $inputPath, '/current/directory/' );
 ```
 This method parses a path string and given a current working directory will generate an absolute path. It will change '..' into the correct path based on the current working directory. It will skip '.' and empty filenames.
