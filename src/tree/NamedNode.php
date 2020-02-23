@@ -161,8 +161,8 @@ class NamedNode implements \Serializable
     {
         if ( isset( $this->childNodes[ $nodeName ] )) {
             $child = $this->childNodes[ $nodeName ];
-            unset( $this->childNodes[ $nodeName ] );
             $child->parentNode = null;
+            unset( $this->childNodes[ $nodeName ] );
 
             return $child;
         } else {

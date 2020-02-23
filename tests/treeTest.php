@@ -9,7 +9,7 @@
      * file that was distributed with this source code.
      */
 
-    class TestTree extends PHPUnit_Framework_TestCase
+    class TreeTest extends PHPUnit\Framework\TestCase
     {
         function testExpand()
         {
@@ -83,4 +83,13 @@
             $this->assertTrue( $collapsed == array( '/foo/' => 'bar' ) );
         }
 
+
+        function testRemove()
+        {
+            $tree = \arc\tree::expand();
+            $tree->childNodes['foo'] = 'bar';
+            $foo = $tree->childNodes['foo'];
+            $tree->removeChild('foo');
+            $this->assertNull($foo->parentNode);            
+        }
     }

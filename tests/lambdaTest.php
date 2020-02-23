@@ -9,7 +9,7 @@
      * file that was distributed with this source code.
      */
 
-    class TestLambda extends PHPUnit_Framework_TestCase
+    class LambdaTest extends PHPUnit\Framework\TestCase
     {
 
         function testSingleton()

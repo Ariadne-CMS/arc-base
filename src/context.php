@@ -13,11 +13,11 @@ namespace arc;
 
 /**
  * Class context
- * A \arc\lambda\Prototype based dependency injection container
+ * A \arc\prototype\Prototype based dependency injection container
  * with stack functionality.
  *
  * @package arc
- * @requires \arc\lambda
+ * @requires \arc\prototype
  */
 class context
 {
@@ -56,6 +56,6 @@ class context
     }
 }
 
-context::$context = new lambda\Prototype([
+context::$context = \arc\prototype::create([
     'arcPath' => '/'
 ]);
