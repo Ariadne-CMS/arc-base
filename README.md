@@ -35,10 +35,9 @@ arc/base contains
 - [path](docs/path.md): parse paths, including relative paths, get parents, etc.
 - [tree](docs/tree.md): methods to parse filesystem-like trees and search and alter them
 - [hash](docs/hash.md): methods to ease common tasks with nested hashes
-- template: simple php based templates, with compile option
+- [template](docs/template.md): simple php based templates, with compile option
 - [context](docs/context.md): nested scope or stackable DI container
 - [lambda](docs/lambda.md): partial function application
-- prototype: prototypical inheritance like javascript
 
 Example code
 ------------
@@ -113,31 +112,3 @@ Example code
         )
     );
     // => [ '/foo/bar/' => 'A bar', '/foo/baz/' => 'Not a bar' ]
-
-### \arc\prototype
-
-    $di = \arc\prototype::create([
-         'dsn'      => 'mysql:dbname=testdb;host=127.0.0.1';
-         'user'     => 'dbuser',
-         'password' => 'dbpassword',
-         'database' => \arc\lambda::singleton( function() {
-             // this generates a single PDO object once and then returns it for each subsequent call
-             return new PDO( $this->dsn, $this->user, $this->password );
-         } ),
-         'session'  => function() {
-             // this returns a new mySession object for each call
-             return new mySession();
-         }
-    ] );
-    // creates a prototype object to be used as dependency injection container
-
-    $diCookieSession = $di->extend( [
-         'session'  => function() {
-             return new myCookieSession();
-         }
-    ] );
-    // extends the $di object to change the session handling
-
-    $db = $di->database();
-    // returns a single instance of the database connection, defined as runtime singleton
-
