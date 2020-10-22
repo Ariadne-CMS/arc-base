@@ -233,7 +233,7 @@ class path
      */
     public static function isAbsolute($path)
     {
-        return $path[0] === '/';
+        return isset($path[0]) && $path[0] === '/';
     }
 
     protected static function getSplitPath($path)
