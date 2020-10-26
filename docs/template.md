@@ -37,5 +37,3 @@ This method is identical to \arc\template::substitute but it removes any keys th
     echo $parsed; // => 'Hello World! from '
 ```
 
-## \arc\template::compile
-	(callable) \arc\template::compile( (string) $template )
