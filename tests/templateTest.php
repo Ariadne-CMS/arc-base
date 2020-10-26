@@ -43,19 +43,4 @@
             $this->assertEquals( 'Hello World! from ', $parsed);
         }
 
-        function testCompile()
-        {
-            $template = 'Foo <?php echo $bar; ?>.';
-            $compiled = \arc\template::compile( $template );
-            $parsed = $compiled([ 'bar' => 'Bar' ]);
-            $this->assertEquals( 'Foo Bar.',  $parsed );
-        }
-
-        function testCompileSubstitute()
-        {
-            $template = 'Hello {$someone} from {$somewhere}';
-            $compiled = \arc\template::compileSubstitute( $template );
-            $parsed = $compiled([ 'someone' => 'you', 'somewhere' => 'Earth' ]);
-            $this->assertEquals( 'Hello you from Earth',  $parsed );
-        }
     }

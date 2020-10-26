@@ -50,35 +50,4 @@ class template
         return preg_replace('/\{\$.*\}/', '', self::substitute( $template, $arguments ) );
     }
 
-    public static function compile($template)
-    {
-        $prefix = <<<'EOFUNC'
-            extract( $arguments, EXTR_REFS );
-            ob_start();
-EOFUNC;
-        $postfix = <<<'EOFUNC'
-            $result = ob_get_contents();
-            ob_end_clean();
-
-            return $result;
-EOFUNC;
-
-        return create_function( '$arguments', $prefix .' ?'.'>'. $template .'<?'.'php ' . $postfix );
-    }
-
-    public static function compileSubstitute($template)
-    {
-        $template = preg_replace('/EOTEMPLATE;.*$/', '', $template);
-
-        return self::compile( "<"."?php\n echo <<<EOTEMPLATE\n".$template."\nEOTEMPLATE;\n ?".">");
-    }
-
-    public static function run($template, $arguments)
-    {
-        if (!is_callable($template)) {
-            $template = self::compile( $template );
-        }
-
-        return $template( $arguments );
-    }
 }
