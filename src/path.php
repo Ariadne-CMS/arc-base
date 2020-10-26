@@ -259,7 +259,7 @@ class path
         if (count($splitPath)) {
             $result = array_map( $callback, $splitPath );
 
-            return '/' . join( $result, '/' ) .'/';
+            return '/' . implode( '/', $result ) .'/';
         } else {
             return '/';
         }

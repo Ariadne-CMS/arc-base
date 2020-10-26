@@ -23,7 +23,7 @@ class template
         if (is_object($arguments) && !($arguments instanceof \ArrayObject )) {
             $arguments = get_object_vars( $arguments );
         }
-        $regex = '\{\$(' . join( array_keys( (array) $arguments ), '|' ) . ')\}';
+        $regex = '\{\$(' . implode( '|', array_keys( (array) $arguments ) ) . ')\}';
 
         return preg_replace_callback( '/'.$regex.'/', function ($matches) use ($arguments) {
             $argument = $arguments[ $matches[1] ];
