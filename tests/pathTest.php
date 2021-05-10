@@ -19,7 +19,7 @@
             });
             $this->assertEquals( '/A/B/C/', $result);
 
-            $result = \arc\path::reduce( $path, function (&$result, $entry) {
+            $result = \arc\path::reduce( $path, function ($result, $entry) {
                 return $result.$entry;
             });
             $this->assertEquals( $result, 'abc' );
