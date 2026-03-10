@@ -66,24 +66,24 @@ class path
     {
         // removes '.', changes '//' to '/', changes '\\' to '/', calculates '..' up to '/'
         if ( $path instanceof \arc\path\Value ) {
-            return $path;
+            return (string)$path;
         }
         if ( !isset($path[0]) ) {
-            return $cwd;
+            return (string)$cwd;
         }
         if ( isset($cwd) && $cwd && $path[0] !== '/' && $path[0] !== '\\' ) {
             $path = $cwd . '/' . $path;
         }
         if ( isset(self::$collapseCache[$path]) ) { // cache hit - so return that
-            return self::$collapseCache[$path];
+            return (string)self::$collapseCache[$path];
         } else {
             $value = new \arc\path\Value($path);
             if ( isset(self::$collapseCache[(string)$value]) ) {
                 self::$collapseCache[$path] = self::$collapseCache[(string)$value];
-                return self::$collapseCache[(string)$value];
+                return (string)self::$collapseCache[(string)$value];
             } else {
                 self::$collapseCache[$path] = self::$collapseCache[(string) $value] = $value;
-                return $value;
+                return (string)$value;
             }
         }
     }

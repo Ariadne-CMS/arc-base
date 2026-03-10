@@ -70,6 +70,7 @@
             $this->assertEquals( '/test/', \arc\path::collapse( '..', '/test/foo/'));
             $this->assertEquals( '/',      \arc\path::collapse( '/..//../', '/test/'));
             $this->assertEquals( '/test/', \arc\path::collapse( '', '/test/'));
+            $this->assertTrue(is_string(\arc\path::collapse('foo/','/bar/')));
         }
 
         function testParents()
